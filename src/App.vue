@@ -1,31 +1,47 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
+    <nav>
+      <!--TODO fiks click area for web navigation -->
+      <div class="ui secondary pointing menu">
+        <router-link to="/">
+        <a class="item" v-bind:class="{'active' : this.activeitems==0}" v-on:click="activeitem(0)">
+          Home
+        </a>
+        </router-link>
+      </div>
+    </nav>
     <router-view/>
   </div>
 </template>
 
+<script>
+export default {
+  name: "app",
+  data(){
+    return{
+      activeitems:0
+    }
+  },
+  methods: {
+    activeitem: function(item) {
+      this.activeitems = item;
+    }
+  }
+}
+</script>
+
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-#nav {
-  padding: 30px;
+  margin-top: 60px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+nav {
+  padding: 20px;
 }
 </style>

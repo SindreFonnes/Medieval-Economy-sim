@@ -1,0 +1,1 @@
+<!-- Add type of undead, hp and what type of undead it is (zombie, uppgraded zombie, skeleton, etc) -->
