@@ -8,6 +8,11 @@
           Home
         </a>
         </router-link>
+        <router-link to="/tmp">
+        <a class="item" v-bind:class="{'active' : this.activeitems==1}" v-on:click="activeitem(1)">
+          Tmp Solution
+        </a>
+        </router-link>
       </div>
     </nav>
     <router-view/>
@@ -15,6 +20,7 @@
 </template>
 
 <script>
+
 export default {
   name: "app",
   data(){

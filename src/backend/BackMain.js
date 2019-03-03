@@ -1,3 +1,4 @@
+/*
 import db from './Database'
 import shortid from './Shortid'
 
@@ -14,3 +15,5 @@ db.defaults({
     Events: {} //adds a list of events that trigger when the date reaches a certain point.
     //add animals?
 })
+
+*/
