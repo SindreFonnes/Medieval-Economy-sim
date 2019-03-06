@@ -6,6 +6,8 @@
                 <Label><b>Money</b></Label>
                 <p>In copper</p>
                 <input class="inputbox" type="text" v-model="money">
+                <p>Counter</p>
+                <input class="inputbox" type="number" v-model="counter">
             </div>
             <div class="input">
                 <label><b>Wood</b></label>
@@ -38,6 +40,17 @@
                 <p>Production</p>
                 <input class="inputbox" type="text" v-model="salt.production">
                 <p>Total salt</p>
+                <input class="inputbox" type="number" v-model="resources.salt">
+            </div>
+            <div class="input">
+                <label><b>Planks</b></label>
+                <p>Workers</p>
+                <input class="inputbox" type="text" v-model="salt.workers">
+                <p>Modifier</p>
+                <input class="inputbox" type="text" v-model="salt.modifier">
+                <p>Production</p>
+                <input class="inputbox" type="text" v-model="salt.production">
+                <p>Total Planks</p>
                 <input class="inputbox" type="number" v-model="resources.salt">
             </div>
             <!--
@@ -82,11 +95,13 @@ export default {
                 wood: 0,
                 bricks: 0,
                 salt: 0
-            }
+            },
+            counter : 0
         }
     },
     methods: {
         calculate : function () {
+            this.counter++;
             this.resources.wood = parseInt(this.resources.wood) + parseInt(this.wood.production*this.wood.workers*this.wood.modifier)
             this.resources.bricks = parseInt(this.resources.bricks) + parseInt(this.bricks.production*this.bricks.workers*this.bricks.modifier)
             this.resources.salt = parseFloat(this.resources.salt) + parseFloat(this.salt.production*this.salt.worker*this.salt.modifier) 
@@ -100,7 +115,7 @@ export default {
     float: left;
 }
 .input {
-    padding-left: 5em;
+    padding: 2em;
     float: left;
 }
 .inputfields {

@@ -13,9 +13,34 @@
           Tmp Solution
         </a>
         </router-link>
+        <router-link to="/generaloverview">
+        <a class="item" v-bind:class="{'active' : this.activeitems==2}" v-on:click="activeitem(2)">
+          General Overview
+        </a>
+        </router-link>
+        <router-link to="/citiesanddivisions">
+        <a class="item" v-bind:class="{'active' : this.activeitems==3}" v-on:click="activeitem(3)">
+          Cities and Divisions
+        </a>
+        </router-link>
+        <router-link to="/tasks">
+        <a class="item" v-bind:class="{'active' : this.activeitems==4}" v-on:click="activeitem(4)">
+          Tasks
+        </a>
+        </router-link>
+        <router-link to="/professions">
+        <a class="item" v-bind:class="{'active' : this.activeitems==5}" v-on:click="activeitem(5)">
+          Profession
+        </a>
+        </router-link>
+        <router-link to="/citizens">
+        <a class="item" v-bind:class="{'active' : this.activeitems==6}" v-on:click="activeitem(6)">
+          Citizens
+        </a>
+        </router-link>
       </div>
     </nav>
-    <router-view/>
+    <router-view :key="routerkey"/>
   </div>
 </template>
 
@@ -25,12 +50,17 @@ export default {
   name: "app",
   data(){
     return{
-      activeitems:0
+      activeitems:0,
+      //to force an update
+      routerkey:0
     }
   },
   methods: {
     activeitem: function(item) {
       this.activeitems = item;
+    },
+    rerender: function(){
+      this.routerkey = this.routerkey+1;
     }
   }
 }

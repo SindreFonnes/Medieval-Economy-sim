@@ -1,19 +1,55 @@
-/*
-import db from './Database'
-import shortid from './Shortid'
+/* eslint-disable */
 
-db.defaults({
-    money: 0, 
-    date: 0, //Current date from startdate. Bases event out from startdate.
-    cities:[], //cities have structures attached to them 
-    profession:[], 
-    population: {}, //hashmap? or array?
-    undead: {}, //hashmap? or array?
-    resources: {},
-    Tasks: {}, //tasks to complete, assign people to them. Some tasks have max manpower, some don't 
-    //tasks also either has en upkeep, an upfront cost or a cost as soon as they finish, make a dropdown button for this.
-    Events: {} //adds a list of events that trigger when the date reaches a certain point.
-    //add animals?
-})
+import app from './../App.vue'
 
-*/
+let data ={
+    date: 0,
+    tasks: [],
+    citiesanddivisions:[
+        {name:"winters reach",iscity:true,structures:[]}
+    ],
+    events:[],
+    professions:[],
+    citizens:[],
+    resources:[],
+    structures:[]
+};
+
+function getData(){
+    return data;
+}
+
+function setData(newdata){
+    this.data = newdata;
+    
+}
+
+function rerender(){
+    app.methods.rerender();
+}
+
+// saving:
+//localStorage.setItem('save', JSON.stringify(data));
+
+// loading:
+//let loadedData = JSON.parse(localStorage.getItem('save'));
+
+// export:
+
+
+
+function downloadTextFile(text, name) {
+    const a = document.createElement('a');
+    const type = name.split(".").pop();
+    a.href = URL.createObjectURL( new Blob([text], { type:`text/${type === "txt" ? "plain" : type}` }) );
+    a.download = name;
+    a.click();
+}
+//download file function
+//downloadTextFile(JSON.stringify(data), 'savefile.json');
+
+export default {
+    getData,
+    setData,
+    rerender
+}

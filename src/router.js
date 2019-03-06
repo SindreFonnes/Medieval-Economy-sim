@@ -2,6 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import TMPSolution from './components/TMPSolution.vue'
+import Tasks from './components/Tasks.vue'
+import GeneralOverview from './components/GeneralOverview.vue'
+import Professions from './components/Professions.vue'
+import Citizens from './components/Citizens.vue'
+import CitiesAndDivisions from './components/CitiesAndDivisions.vue'
 
 Vue.use(Router)
 
@@ -26,6 +31,31 @@ export default new Router({
       path: '/tmp',
       name: 'tmp',
       component: TMPSolution
+    },
+    {
+      path: '/tasks',
+      name: 'tasks',
+      component: Tasks
+    },
+    {
+      path: '/generaloverview',
+      name: 'generaloverview',
+      component: GeneralOverview
+    },
+    {
+      path: '/professions',
+      name: 'professions',
+      component: Professions
+    },
+    {
+      path: '/citizens',
+      name: 'citizens',
+      component: Citizens
+    },
+    {
+      path: '/citiesanddivisions',
+      name: 'citiesanddivisions',
+      component: CitiesAndDivisions
     }
   ]
 })
