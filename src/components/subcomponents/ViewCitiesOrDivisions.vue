@@ -3,9 +3,9 @@
         <div class="column cityordivision" v-for="cityordivision in this.citiesanddivisions" v-bind:key="cityordivision.id">
 
             <b>Name: {{cityordivision.name}}</b>
-            <p>Is a <b v-if="cityordivision.isCity">City</b><b v-if="!cityordivision.isCity">Division</b></p>
+            <p>Is a <b v-if="cityordivision.iscity">City</b><b v-if="!cityordivision.iscity">Division</b></p>
             <!-- Add strutures -->
-            <button v-on:click="removeentry(cityordivision)">Remove <b v-if="cityordivision.isCity">City</b><b v-if="!cityordivision.isCity">Division</b></button>
+            <button v-on:click="removeentry(cityordivision)">Remove <b v-if="cityordivision.iscity">City</b><b v-if="!cityordivision.iscity">Division</b></button>
         </div>
     </div>
 </template>

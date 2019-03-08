@@ -38,6 +38,21 @@
           Citizens
         </a>
         </router-link>
+        <router-link to="/resources">
+        <a class="item" v-bind:class="{'active' : this.activeitems==7}" v-on:click="activeitem(7)">
+          Resources
+        </a>
+        </router-link>
+        <router-link to="/wares">
+        <a class="item" v-bind:class="{'active' : this.activeitems==8}" v-on:click="activeitem(8)">
+          Wares
+        </a>
+        </router-link>
+        <router-link to="/structuredesigns">
+        <a class="item" v-bind:class="{'active' : this.activeitems==9}" v-on:click="activeitem(9)">
+          Structure Designs
+        </a>
+        </router-link>
       </div>
     </nav>
     <router-view :key="routerkey"/>

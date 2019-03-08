@@ -1,5 +1,6 @@
 <template>
     <div class="field inputfields">
+        <p><b>{{errormessage}}</b></p>
         <label><b>Add Profession</b></label>
         <div class="fields">
             <div class="input">
@@ -32,11 +33,16 @@ export default {
                 id: "",
                 description: "",
                 revenueorupkeep: 0
-            }
+            },
+            errormessage: ""
         }
     },
     methods: {
         submit: function() {
+            if(this.profession.name===""){
+                this.errormessage="You must add a name to the profession"
+                return;
+            }
             let tmp = backMain.getData();
             this.profession.id = shortid.generate();
             this.profession.revenueorupkeep = parseFloat(this.profession.revenueorupkeep);

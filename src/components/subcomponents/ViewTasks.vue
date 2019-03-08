@@ -13,6 +13,9 @@
             <div v-if="task.hasaduration&&task.amountofworkers>0">
                 Remaining duration {{task.taskduration*(task.amountofworkers/task.maxamountofworkers)*task.efficency}}
             </div>
+            <div v-if="task.type==='exploit resource'">
+                <p>Resource being exploited: {{task.resourcebeingexploited}}</p>
+            </div>
             <div class="input">
                 <label><p>Efficency</p></label>
                 <input class="inputbox" type="number" step="0.01" v-model="task.efficency">
@@ -49,6 +52,10 @@ export default {
         },
         removeentry: function(data){
             let tmp = backMain.getData()
+            if(data.type===tmp.tasktypes[0]){
+                let i = tmp.resources.findIndex(t => t.id == this.data.resourceexploited)
+                tmp.resources[i].resourceexploited = false;
+            }
 
             tmp.tasks = tmp.tasks.filter(t => t.id != data.id);
 

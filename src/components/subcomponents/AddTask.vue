@@ -1,10 +1,29 @@
 <template>
     <div class="field inputfields">
+        <label><b>{{errormessage}}</b></label>
         <label><b>Add Task</b></label>
         <div class="fields">
             <div class="initinput">
                 <Label><p>Task Name</p></Label>
                 <input class="inputbox" type="text" v-model="task.name">
+            </div>
+            <div class="input">
+                <Label><p>Task type</p></Label>
+                <select v-model="task.type">
+                    <option v-for="tasktype in this.data.tasktypes" v-bind:key="tasktype">{{tasktype}}</option>
+                </select>
+            </div>
+            <div class="input" v-show="task.type === data.tasktypes[0]">
+                <Label><p>Resource exploited</p></Label>
+                <select v-model="task.resourceexploited">
+                    <option v-for="resource in this.data.resources" v-bind:key="resource" v-bind:value="resource.id">{{resource.name}}</option>
+                </select>
+            </div>
+            <div class="input" v-if="task.type===data.tasktypes[3]">
+                <Label><p>Ware used in manufacture</p></Label>
+                <select label="Ware" v-model="task.wareusedinmanufacture">
+                    <option  v-for="ware in this.data.wares" v-bind:key="ware.id" v-bind:value="ware.id">{{ware.name}}</option>
+                </select>
             </div>
             <div class="input">
                 <label><p>Has a worker cap</p></label>
@@ -13,6 +32,10 @@
             <div class="input" v-if="this.task.hasmaxworkers">
                 <label><p>Max Workers</p></label>
                 <input class="inputbox" type="number" step="1" v-model="task.maxamountofworkers">
+            </div>
+            <div class="input" v-if="task.type===data.tasktypes[3]||task.type===data.tasktypes[0]" >
+                <label><p>Production per worker</p></label>
+                <input class="inputbox" type="number" step="1" v-model="task.productionperworker">
             </div>
             <div class="input">
                 <label><p>Efficency</p></label>
@@ -23,7 +46,8 @@
                 <input class="inputbox checkbox" type="checkbox" v-model="task.hasaduration">
             </div>
             <div class="input" v-if="this.task.hasaduration">
-                <label><p>Duration (at max workers and 100% efficency)</p></label>
+                <label><p>Duration (at max workers, or one worker </p></label>
+                <p>if no max worker and 100% efficency)</p>
                 <input class="inputbox" type="number" step="1" v-model="task.taskduration">
             </div>
             <div class="input">
@@ -34,11 +58,29 @@
                 <label><p>Revenue or upkeep per worker (in copper)</p></label>
                 <input class="inputbox" type="number" step="0.01" v-model="task.revenueorupkeep">
             </div>
-            <div class="input">
+            <div class="input" v-if="task.type===data.tasktypes[0]||task.type===data.tasktypes[3]">
+                <Label><p>Gain wares from exploitation</p></Label>
+                <input type="checkbox" v-model="task.gainwares">
+            </div>
+            <div class="input" v-if="task.type===data.tasktypes[1]">
+                <label><p>Task Results</p></label>
+                <!-- Make dropdown for structures -->
+            </div>
+            <div class="input" v-if="task.type===data.tasktypes[2]">
+                <label><p>Task Results</p></label>
+                <!-- Make dropdown for vehicles -->
+            </div>
+            <div class="input" v-if="task.type===data.tasktypes[3]&&task.gainwares">
+                <Label><p>Ware gained from manufacture</p></Label>
+                <select label="Ware" v-model="task.waregainedfrommanufacture">
+                    <option  v-for="ware in this.data.wares" v-bind:key="ware.id" v-bind:value="ware.id">{{ware.name}}</option>
+                </select>
+            </div>
+            <div class="input" v-if="task.type===data.tasktypes[4]">
                 <label><p>Task Results</p></label>
                 <input class="inputbox" type="text" v-model="task.taskresults">
-                <!-- What is the outcome of the task, new structure(docks, buildings walls etc) or something else. -->
             </div>
+            
         </div>
         <button v-on:click="submit">Submit</button>
     </div>
@@ -55,21 +97,78 @@ export default {
             task: {
                 name: "",
                 id: "",
+                type: "",
+                resourceexploited: "",
                 amountofworkers: 0,
                 hasmaxworkers: false,
                 maxamountofworkers: 0,
+                productionperworker: 0,
                 efficency: 1,
                 hasaduration: false,
                 taskduration: 0,
                 taskresults: "",
                 hasrevenueorupkeep: false,
-                revenueorupkeep: 0
-            }
+                revenueorupkeep: 0,
+                gainwares: true,
+                wareusedinmanufacture: "",
+                waregainedfrommanufacture: ""
+            },
+            data: {},
+            errormessage: ""
         }
+    },
+    created: function(){
+        this.data = backMain.getData()
+        
     },
     methods: {
         submit: function() {
             let tmp = backMain.getData();
+            this.errormessage=""
+            if(this.task.name===""){
+                this.errormessage="You must add a name to the task!"
+                return;
+            }
+            if(this.task.type===""){
+                this.errormessage="You must add a tasktype to the task!"
+                return;
+            }
+            if(this.task.name===""){
+                this.errormessage="You must add a name to the task!"
+                return;
+            }
+            this.task.productionperworker = parseFloat(this.task.productionperworker)
+            if((this.task.type===this.data.tasktypes[3]||this.task.type===this.data.tasktypes[0])&&this.task.productionperworker===0.0){
+                this.errormessage="You must add a amount of production per worker!"
+                return;
+            }
+            if(this.task.type===this.data.tasktypes[0]){
+                if(this.task.resourceexploited!=""){
+                    let i = tmp.resources.findIndex(t => t.id == this.task.resourceexploited)
+                    tmp.resources[i].resourceexploited = true;
+                } else {
+                    this.errormessage = "You need to select a resource to exploit!"
+                    return;
+                }
+            }
+            if(this.task.type===this.data.tasktypes[3]){
+                if(this.task.wareusedinmanufacture===""){
+                    this.errormessage = "You need to select a ware to use!"
+                    return;
+                }
+            }
+            if(this.task.type===this.data.tasktypes[3]&&this.task.gainwares){
+                if(this.task.gainedfrommanufacture===""){
+                    this.errormessage = "You need to select a ware to gain!"
+                    return;
+                }
+            }
+            if(this.task.type===this.data.tasktypes[3]){
+                if(this.task.gainedfrommanufacture===this.task.wareusedinmanufacture){
+                    this.errormessage = "You gain and use the same ware!"
+                    return;
+                }
+            }
             this.task.amountofworkers = parseInt(this.task.amountofworkers)
             this.task.maxamountofworkers = parseInt(this.task.maxamountofworkers)
             this.task.efficency = parseFloat(this.task.efficency)

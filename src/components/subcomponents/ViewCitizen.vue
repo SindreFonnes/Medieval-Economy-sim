@@ -1,15 +1,14 @@
 <template>
     <div class="ui four column doubling stackable grid container">
         <div class="column citizen" v-for="citizen in this.citizens" v-bind:key="citizen.id">
-
-            <b>Name: {{citizen.name}} Surname: {{citizen.surname}}</b>
-            <p>Age: {{citizen.age}}</p>
-            <p>Belongs to: {{citizen.cityordivision}}</p>
-            <p>Profession: {{citizen.Profession}}</p>
-            <p>Current task: <v-select label="task" 
+            <b>Profession: {{citizen.Profession}}</b>
+            <b>Current task: <v-select label="task" 
             :options="data.tasks" 
             v-model="citizen.task"
-            v-on:change="updatetask"></v-select></p>
+            v-on:change="updatetask"></v-select></b>
+            <p>Belongs to: {{citizen.cityordivision}}</p>
+            <p>Name: {{citizen.name}} Surname: {{citizen.surname}}</p>
+            <p>Age: {{citizen.age}}</p>
             <p>Available for new tasks : {{citizen.available}}</p>
             <button v-if="citizen.available" v-on:click="changeavailability(citizen, false)">Make unavailable</button>
             <button v-if="!citizen.available" v-on:click="changeavailability(citizen, true)">Make available</button>

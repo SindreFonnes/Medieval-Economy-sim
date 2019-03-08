@@ -7,6 +7,9 @@ import GeneralOverview from './components/GeneralOverview.vue'
 import Professions from './components/Professions.vue'
 import Citizens from './components/Citizens.vue'
 import CitiesAndDivisions from './components/CitiesAndDivisions.vue'
+import Resources from './components/Resources.vue'
+import Wares from './components/Wares.vue'
+import StructureDesigns from './components/StructureDesigns'
 
 Vue.use(Router)
 
@@ -56,6 +59,21 @@ export default new Router({
       path: '/citiesanddivisions',
       name: 'citiesanddivisions',
       component: CitiesAndDivisions
+    },
+    {
+      path: '/resources',
+      name: 'resources',
+      component: Resources
+    },
+    {
+      path: '/wares',
+      name: 'wares',
+      component: Wares
+    },
+    {
+      path: '/structuredesigns',
+      name: 'structuredesigns',
+      component: StructureDesigns
     }
   ]
 })

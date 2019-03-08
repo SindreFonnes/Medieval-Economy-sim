@@ -1,0 +1,17 @@
+
+TODO
+Add ware: done
+Remove worker cap on resources, add to task :done
+Add exploitmodifier to resource(how easy it is to extract) :done
+Make tasks works on resources or structures, vehicles or custom :started
+Complete AddVehicle
+
+
+Fix viewtask and addtask
+
+
+Add complexes, to which structures belong.
+Add home to citizens, where they live. Defaults to 'no home'
+
+Make citizen able to own structures by making two dropdownmenus to add a structure to their info and their info to the structure, claiming ownership
+Move methods that require loops or filtering to backmain out from classes.

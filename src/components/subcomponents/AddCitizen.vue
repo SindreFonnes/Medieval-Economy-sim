@@ -1,8 +1,8 @@
 <template>
     <div class="field inputfields">
+        <p><b>{{errormessage}}</b></p>
         <label><b>Add Citizen</b></label>
         <div class="fields">
-            <!-- When a citizen is created, make sure to generate an id for them aswell -->
             <div class="initinput">
                 <Label><p>Age</p></Label>
                 <input type="number" steps="0.01" v-model="citizen.age">
@@ -21,19 +21,22 @@
             </div>
             <div class="input">
                 <label><p>Home city/ unit assignment</p></label>
-                <v-select label="City or Division" :options="data.cityordivision" v-model="citizen.cityordivision"></v-select>
-                <!-- Dropdown with city selection or a selection for division thye belong to, like
-                military 1, eastern watch, mining guild etc. -->
+                <select label="City or Division" v-model="citizen.cityordivision">
+                    <option v-for="cityordivision in data.citiesanddivisions" v-bind:key="cityordivision.id">{{cityordivision.name}}</option>
+                </select>
             </div>
             <div class="input">
                 <label><p>Profession</p></label>
-                <v-select label="profession" :options="data.professions" v-model="citizen.profession"></v-select>
+                <select label="profession" v-model="citizen.profession">
+                    <option v-for="profession in data.professions" v-bind:key="profession.id">{{profession.name}}</option>
+                </select>
                 <!-- Dropdown with professions -->
             </div>
             <div class="input">
                 <label><p>Availability for new tasks (unchecked means not available)</p></label>
                 <input class="inputbox" type="checkbox" v-model="citizen.available">
             </div>
+            <!-- Add homeselection, defaults to 'nohome' -->
         </div>
         <button v-on:click="submit">Submit</button>
     </div>
@@ -54,11 +57,12 @@ export default {
                 name: "",
                 surname: "",
                 cityordivision: "",
-                Profession: "",
+                profession: "",
                 task: "",
                 available: false
             },
-            data : {}
+            data : {},
+            errormessage: ""
         }
     },
     mounted: function() {
@@ -69,17 +73,31 @@ export default {
             this.data = backMain.getData()
         },
         submit: function(){
+            this.errormessage=""
+            if(this.citizen.name===""){
+                this.errormessage="You must add a name to the citizen!"
+                return;
+            }
+            if(this.citizen.cityordivision===""){
+                this.errormessage="You must add a Home city/division to the citizen!"
+                return;
+            }
+            if(this.citizen.profession===""){
+                this.errormessage="You must add a profession to the citizen!"
+                return;
+            }
             let tmp = backMain.getData()
             this.citizen.id = shortid.generate()
             this.citizen.age = parseFloat(this.citizen.age)
             tmp.citizen.push(clonedeep(this.citizen))
-            backMain.setData(clonedeep(clonedeep(tmp)))
+            backMain.setData(clonedeep(tmp))
             this.citizen = {
                 id : "",
                 age : 0,
                 name: "",
+                surname: "",
                 cityordivision: "",
-                Profession: "",
+                profession: "",
                 task: "",
                 available: false
             }

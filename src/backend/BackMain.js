@@ -6,13 +6,29 @@ let data ={
     date: 0,
     tasks: [],
     citiesanddivisions:[
-        {name:"winters reach",iscity:true,structures:[]}
+        {id:"0001",name:"Winter's Reach",iscity:true,complexes:[]}
     ],
     events:[],
     professions:[],
     citizens:[],
     resources:[],
-    structures:[]
+    structuredesigns:[],
+    complexes: [],
+    wares:[],
+    units:[
+        "cubic meters",
+        "square meters",
+        "liters",
+        "kilograms"
+    ],
+    tasktypes:[
+        "exploit resource",
+        "build structure",
+        "build vehicle",
+        "manufacture goods",
+        "custom task"
+    ],
+    vehicles:[]
 };
 
 function getData(){

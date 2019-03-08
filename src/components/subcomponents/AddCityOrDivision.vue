@@ -8,7 +8,7 @@
                 <Label><p>City/Division Name</p></Label>
                 <input type="text" v-model="cityordivision.name">
             </div>
-            <div class="initinput">
+            <div class="input">
                 <Label><p>Is a City(if false, it's a division)</p></Label>
                 <input type="checkbox" v-model="cityordivision.iscity">
             </div>
@@ -30,7 +30,7 @@ export default {
                 id: "",
                 name: "",
                 iscity: true,
-                structures:[]
+                complexes:[]
             },
             errormessage: ""
         }
@@ -38,6 +38,10 @@ export default {
     methods: {
         submit: function(){
             this.errormessage="";
+            if(this.cityordivision.name===""){
+                this.errormessage="You must add a name to the city/division!"
+                return;
+            }
             let tmp = backMain.getData();
             for(let i = 0; i<tmp.citiesanddivisions.length; i++){
                 if(tmp.citiesanddivisions[i].name==this.cityordivision.name){
