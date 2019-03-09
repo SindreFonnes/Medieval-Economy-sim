@@ -72,7 +72,7 @@ export default {
             errormessage: ""
         }
     },
-    mounted: function() {
+    created: function() {
         this.complexes = backMain.getData().complexes
     },
     methods: {
@@ -95,8 +95,17 @@ export default {
                 id : "",
                 name : "",
                 description: "",
-                price : 0,
-                unit: ""
+                owner: "",
+                designatedcomplex: "",
+                value: 0,
+                goundcovered: {
+                    x: 0,
+                    y: 0
+                },
+                spaceused: 0,
+                isinhabitable: false,
+                maxoccupants: 0,
+                currentoccupants: []
             }
         }
     }

@@ -1,6 +1,6 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column wares" v-for="ware in this.wares" v-bind:key="ware.id">
+        <div class="column wares" v-for="ware in wares" v-bind:key="ware.id">
             <b>Name: {{ware.name}}</b>
             <p>Description: {{ware.description}}</p>
             <p>Amount owned: {{ware.amountowned}}</p>
@@ -17,16 +17,15 @@ import clonedeep from 'lodash.clonedeep'
 export default {
     data() {
         return{
-            wares: []
+            
         }
     },
-    mounted: function() {
-        this.wares = backMain.getData().wares
+    computed: {
+        wares : function() {
+            return backMain.getData().wares
+        }
     },
     methods: {
-        getData: function(){
-            this.wares = backMain.getData().wares
-        },
         removeentry: function(data){
             let tmp = backMain.getData()
 
@@ -34,7 +33,6 @@ export default {
 
             backMain.setData(clonedeep(tmp))
             this.resources = []
-            this.getData();
         }
     }
 }

@@ -50,12 +50,7 @@ export default {
         }
     },
     created: function() {
-        let tmp = backMain.getData().wares
-        for(let i = 0; i<tmp.length; i++){
-            if(tmp[i].buildingmaterial) {
-                this.buildingmaterials.push(tmp[i])
-            }
-        }
+        this.buildingmaterials = backMain.getBuildingmaterials()
     },
     methods: {
         submit: function(){

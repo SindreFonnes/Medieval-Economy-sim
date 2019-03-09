@@ -1,17 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import TMPSolution from './components/TMPSolution.vue'
-import Tasks from './components/Tasks.vue'
-import GeneralOverview from './components/GeneralOverview.vue'
-import Professions from './components/Professions.vue'
-import Citizens from './components/Citizens.vue'
-import CitiesAndDivisions from './components/CitiesAndDivisions.vue'
-import Resources from './components/Resources.vue'
-import Wares from './components/Wares.vue'
-import StructureDesigns from './components/StructureDesigns'
+
 
 Vue.use(Router)
+
 
 export default new Router({
   mode: 'history',
@@ -33,47 +26,47 @@ export default new Router({
     {
       path: '/tmp',
       name: 'tmp',
-      component: TMPSolution
+      component: () => import('./components/TMPSolution.vue')
     },
     {
       path: '/tasks',
       name: 'tasks',
-      component: Tasks
+      component: () => import('./components/Tasks.vue')
     },
     {
       path: '/generaloverview',
       name: 'generaloverview',
-      component: GeneralOverview
+      component: () => import('./components/GeneralOverview.vue')
     },
     {
       path: '/professions',
       name: 'professions',
-      component: Professions
+      component: () => import('./components/Professions.vue')
     },
     {
       path: '/citizens',
       name: 'citizens',
-      component: Citizens
+      component: () => import('./components/Citizens.vue')
     },
     {
       path: '/citiesanddivisions',
       name: 'citiesanddivisions',
-      component: CitiesAndDivisions
+      component: () => import('./components/CitiesAndDivisions.vue')
     },
     {
       path: '/resources',
       name: 'resources',
-      component: Resources
+      component: () => import('./components/Resources.vue')
     },
     {
       path: '/wares',
       name: 'wares',
-      component: Wares
+      component: () => import('./components/Wares.vue')
     },
     {
       path: '/structuredesigns',
       name: 'structuredesigns',
-      component: StructureDesigns
+      component: () => import('./components/StructureDesigns')
     }
   ]
 })

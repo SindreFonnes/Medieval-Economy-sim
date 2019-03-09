@@ -35,10 +35,11 @@ export default {
             this.event.id = shortid.generate()
             tmp.events.push();
             backMain.setData(tmp);
-            windows.alert("Event saved!")
-            this.event.id = ""
-            this.event.name = ""
-            this.event.date = 0
+            this.event = {
+                id: "",
+                name: "",
+                date: 0
+            }
         }
     }
 }

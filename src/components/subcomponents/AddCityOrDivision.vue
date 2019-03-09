@@ -52,10 +52,12 @@ export default {
             this.cityordivision.id = shortid.generate();
             tmp.citiesanddivisions.push(clonedeep(this.cityordivision));
             backMain.setData(clonedeep(tmp));
-            this.cityordivision.id
-            this.cityordivision.name = "",
-            this.cityordivision.iscity = true,
-            this.cityordivision.structures = []
+            this.cityordivision = {
+                id: "",
+                name: "",
+                iscity: true,
+                complexes:[]
+            }
         }
     }
 }

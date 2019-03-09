@@ -52,7 +52,7 @@ export default {
             errormessage: ""
         }
     },
-    mounted: function() {
+    created: function() {
         this.units = backMain.getData().units
     },
     methods: {
@@ -76,7 +76,9 @@ export default {
                 name : "",
                 description: "",
                 price : 0,
-                unit: ""
+                unit: "",
+                amountowned: 0,
+                buildingmaterial: false
             }
         }
     }

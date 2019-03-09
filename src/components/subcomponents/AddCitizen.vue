@@ -69,9 +69,6 @@ export default {
         this.data = backMain.getData()
     },
     methods: {
-        getData: function(){
-            this.data = backMain.getData()
-        },
         submit: function(){
             this.errormessage=""
             if(this.citizen.name===""){
@@ -101,7 +98,6 @@ export default {
                 task: "",
                 available: false
             }
-            this.getData();
         }
     }
 }

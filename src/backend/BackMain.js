@@ -35,8 +35,30 @@ function getData(){
     return data;
 }
 
+function getCities() {
+    let cities = [];
+    for(let i = 0; i<data.citiesanddivisions.length; i++){
+        if(data.citiesanddivisions[i].iscity){ 
+            cities.push(data.citiesanddivisions[i])
+        }
+    }
+    return cities;
+}
+
+function getBuildingmaterials() {
+    let material = []
+    for(let i = 0; i<data.wares.length; i++){
+        if(data.wares[i].buildingmaterial) {
+            material.push(data.wares[i])
+        }
+    }
+    return material;
+}
+
 function setData(newdata){
-    this.data = newdata;
+    data = newdata;
+    console.log(data)
+    console.log('Hei')
     
 }
 
@@ -67,5 +89,7 @@ function downloadTextFile(text, name) {
 export default {
     getData,
     setData,
-    rerender
+    rerender,
+    getCities,
+    getBuildingmaterials
 }
