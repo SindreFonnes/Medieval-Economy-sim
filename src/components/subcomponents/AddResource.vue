@@ -13,7 +13,7 @@
             </div>
             <div class="input">
                 <label><p>Location</p></label>
-                <select label="City" :options="this.cities" v-model="resource.city">
+                <select label="City" v-model="resource.city">
                     <option  v-for="city in this.cities" v-bind:key="city.id" v-bind:value="city.id">{{city.name}}</option>
                 </select>
             </div>

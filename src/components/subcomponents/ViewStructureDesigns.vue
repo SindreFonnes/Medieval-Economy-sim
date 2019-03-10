@@ -8,7 +8,10 @@
                 <p v-for="buildingmaterial in structuredesign.buildingmaterials" v-bind:key="buildingmaterial.id">
                     <b>{{buildingmaterials.find(t => t.id ==buildingmaterial.id).name}} : {{buildingmaterial.amountneeded}}</b>
                 </p>
+                <!-- Add time to construct each cubic meter on average -->
             </div>
+            <p>Time needed per cubic meter(in hours):</p>
+            <p>{{structuredesign.timepercubicmeter}}</p>
             <button v-on:click="removeentry(structuredesign)">Remove structuredesign</button>
         </div>
     </div>

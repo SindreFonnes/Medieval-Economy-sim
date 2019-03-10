@@ -12,13 +12,9 @@
                 <input class="inputbox" type="text" v-model="complex.description">
             </div>
             <div class="input">
-                <label><p>complex Revenue/Upkeep (in copper per day)</p></label>
-                <input class="inputbox" type="number" steps="0.01" v-model="complex.revenueorupkeep">
-            </div>
-            <div class="input">
                 <label><p>Complex location</p></label>
-                <select label="City or Division" v-model="citizen.cityordivision">
-                    <option v-for="cityordivision in data.citiesanddivisions" v-bind:key="cityordivision.id">{{cityordivision.name}}</option>
+                <select label="City or Division" v-model="complex.location">
+                    <option v-for="city in cities" v-bind:key="city.id" v-bind:value="city.id">{{city.name}}</option>
                 </select>
             </div>
         </div>
@@ -38,26 +34,44 @@ export default {
                 name: "",
                 id: "",
                 description: "",
-                revenueorupkeep: 0
+                location: "",
+                structures: []
             },
-            errormessage: ""
+            errormessage: "",
+            cities: []
+        }
+    },
+    created: function() {
+        let tmp = backMain.getData()
+        this.resources = tmp.resources
+        this.wares = tmp.wares
+        for(let i = 0; i<tmp.citiesanddivisions.length; i++){
+            if(tmp.citiesanddivisions[i].iscity){ 
+                this.cities.push(tmp.citiesanddivisions[i])
+            }
         }
     },
     methods: {
         submit: function() {
             if(this.complex.name===""){
-                this.errormessage="You must add a name to the complex"
+                this.errormessage="You must add a name to the complex!"
+                return;
+            }
+            if(this.complex.location===""){
+                this.errormessage="You must add a location to the complex!"
                 return;
             }
             let tmp = backMain.getData();
             this.complex.id = shortid.generate();
-            this.complex.revenueorupkeep = parseFloat(this.complex.revenueorupkeep);
-            tmp.complexs.push(clonedeep(this.complex));
+            tmp.complexes.push(clonedeep(this.complex));
             backMain.setData(clonedeep(tmp));
-            this.complex.name = ""
-            this.complex.id = ""
-            this.complex.description = ""
-            this.complex.revenueorupkeep = 0
+            this.complex = {
+                name: "",
+                id: "",
+                description: "",
+                location: "",
+                structures: []
+            }
         }
     }
 }

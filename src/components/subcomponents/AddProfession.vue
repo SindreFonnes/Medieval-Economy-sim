@@ -48,10 +48,12 @@ export default {
             this.profession.revenueorupkeep = parseFloat(this.profession.revenueorupkeep);
             tmp.professions.push(clonedeep(this.profession));
             backMain.setData(clonedeep(tmp));
-            this.profession.name = ""
-            this.profession.id = ""
-            this.profession.description = ""
-            this.profession.revenueorupkeep = 0
+            this.profession= {
+                name: "",
+                id: "",
+                description: "",
+                revenueorupkeep: 0
+            }
         }
     }
 }

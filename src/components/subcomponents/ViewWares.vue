@@ -1,6 +1,6 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column wares" v-for="ware in this.wares" v-bind:key="ware.id">
+        <div class="column wares" v-for="ware in wares" v-bind:key="ware.id">
             <b>Name: {{ware.name}}</b>
             <p>Description: {{ware.description}}</p>
             <p>Amount owned: {{ware.amountowned}}</p>
@@ -33,7 +33,7 @@ export default {
             tmp.wares = tmp.wares.filter(t => t.id != data.id);
 
             backMain.setData(clonedeep(tmp))
-            this.resources = []
+            this.wares = []
             this.getData();
         }
     }

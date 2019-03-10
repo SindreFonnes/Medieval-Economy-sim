@@ -11,6 +11,10 @@
                 <input type="text" v-model="structuredesign.description">
             </div>
             <div class="input">
+                <label><p>Time needed for each cubic meter, per worker, in hours</p></label>
+                <input type="number" steps="0.01" v-model="structuredesign.timepercubicmeter">
+            </div>
+            <div class="input">
                 <Label><p>Buildingmaterials used (Hold ctrl to select multiple)</p></Label>
                 <select v-model="tmpmaterials" multiple>
                     <option v-for="buildingmaterial in this.buildingmaterials" 
@@ -21,7 +25,6 @@
             <div class="input" v-for="(buildingmaterial, index) in this.tmpmaterials" v-bind:key="buildingmaterial.id">
                 <label><p>{{buildingmaterial.name}} needed per cubic meter {{index}}</p></label>
                 <input type="number" steps="0.01" v-model="structuredesign.buildingmaterials[buildingmaterial.id]">
-                <!-- TODO finish for løkke og legg til antall byggemateriale i et object/array -->
             </div>
         </div>
         <button v-on:click="submit">Submit</button>
@@ -41,6 +44,7 @@ export default {
                 id : "",
                 name : "",
                 description: "",
+                timepercubicmeter: 0,
                 measureunit: "cubic meters",
                 needsmaterials: true,
                 buildingmaterials: {}
@@ -72,13 +76,14 @@ export default {
             }, []);
 
             this.structuredesign.id = shortid.generate()
-            this.structuredesign.price = parseFloat(this.structuredesign.price)
+            this.structuredesign.timepercubicmeter = parseFloat(this.structuredesign.timepercubicmeter)
             tmp.structuredesigns.push(clonedeep(this.structuredesign))
             backMain.setData(clonedeep(tmp))
             this.structuredesign = {
                 id : "",
                 name : "",
                 description: "",
+                timepercubicmeter: 0,
                 measureunit: "cubic meters",
                 needsmaterials: true,
                 buildingmaterials: {}

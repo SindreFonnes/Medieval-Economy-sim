@@ -26,7 +26,7 @@ export default {
             professions: []
         }
     },
-    mounted: function() {
+    created: function() {
         this.professions = backMain.getData().professions
     },
     methods: {

@@ -177,16 +177,25 @@ export default {
             this.task.id = shortid.generate()
             tmp.tasks.push(clonedeep(this.task));
             backMain.setData(clonedeep(tmp));
-            this.task.name = "";
-            this.task.id = "";
-            this.task.amountofworkers = 0;
-            this.task.hasmaxworkers = false;
-            this.task.maxamountofworkers = 0;
-            this.task.efficency = 1;
-            this.task.hasaduration = false;
-            this.task.taskduration = 0;
-            this.task.taskresults = "";
-            //backMain.rerender();
+            this.task= {
+                name: "",
+                id: "",
+                type: "",
+                resourceexploited: "",
+                amountofworkers: 0,
+                hasmaxworkers: false,
+                maxamountofworkers: 0,
+                productionperworker: 0,
+                efficency: 1,
+                hasaduration: false,
+                taskduration: 0,
+                taskresults: "",
+                hasrevenueorupkeep: false,
+                revenueorupkeep: 0,
+                gainwares: true,
+                wareusedinmanufacture: "",
+                waregainedfrommanufacture: ""
+            }
         }
     }
 }

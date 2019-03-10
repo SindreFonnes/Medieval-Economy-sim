@@ -12,8 +12,10 @@
                 <input type="text" v-model="structure.description">
             </div>
             <div class="input">
-                <Label><p>Structure estimated value</p></Label>
-                <input type="number" step="0.01" v-model="structure.value">
+                <label><p>Design used</p></label>
+                <select v-model="structure.designused">
+                    <option v-for="structuredesign in structuredesigns" v-bind:key="structuredesign.id" v-bind:value="structuredesign.id">{{structuredesign.name}}</option>
+                </select>
             </div>
             <div class="input">
                 <Label><p>Structure ground covered in meters</p></Label>
@@ -27,8 +29,12 @@
             <div class="input">
                 <Label><p>Complex it belongs to</p></Label>
                 <select v-model="structure.designatedcomplex">
-                    <option v-for="complex in this.complexes" v-bind:key="complex.id">{{complex.name}}</option>
+                    <option v-for="complex in this.complexes" v-bind:key="complex.id" v-bind:value="complex.id">{{complex.name}}</option>
                 </select>
+            </div>
+            <div class="input">
+                <label>Needs to be constructed</label>
+                <input type="checkbox" v-model="structure.underconstruction">
             </div>
             <div class="input">
                 <Label><p>Is habitable</p></Label>
@@ -55,25 +61,29 @@ export default {
             structure: {
                 id : "",
                 name : "",
+                designused: "",
                 description: "",
                 owner: "",
                 designatedcomplex: "",
-                value: 0,
-                goundcovered: {
+                groundcovered: {
                     x: 0,
                     y: 0
                 },
                 spaceused: 0,
                 isinhabitable: false,
                 maxoccupants: 0,
-                currentoccupants: []
+                currentoccupants: [],
+                workhoursneeded: 0,
+                underconstruction: true
             },
             complexes: [],
-            errormessage: ""
+            errormessage: "",
+            structuredesigns: []
         }
     },
-    mounted: function() {
+    created: function() {
         this.complexes = backMain.getData().complexes
+        this.structuredesigns = backMain.getData().structuredesigns
     },
     methods: {
         submit: function(){
@@ -86,17 +96,38 @@ export default {
                 this.errormessage="You must add a name to the structure!"
                 return;
             }
+            if(this.structure.designused===""){
+                this.errormessage="You must add a design to the structure!"
+                return;
+            }
+            if(this.structure.designatedcomplex===""){
+                this.errormessage="You must add a complex to the structure!"
+                return;
+            }
             let tmp = backMain.getData()
             this.structure.id = shortid.generate()
-            this.structure.price = parseFloat(this.structure.price)
+            this.structure.groundcovered.x = parseFloat(this.structure.groundcovered.x)
+            this.structure.groundcovered.y = parseFloat(this.structure.groundcovered.y)
+            this.structure.workhoursneeded = this.structure.spaceused*this.structuredesigns.find(t => t.id == this.structure.designused).timepercubicmeter
             tmp.structures.push(clonedeep(this.structure))
             backMain.setData(clonedeep(tmp))
             this.structure = {
                 id : "",
                 name : "",
+                designused: "",
                 description: "",
-                price : 0,
-                unit: ""
+                owner: "",
+                designatedcomplex: "",
+                groundcovered: {
+                    x: 0,
+                    y: 0
+                },
+                spaceused: 0,
+                isinhabitable: false,
+                maxoccupants: 0,
+                currentoccupants: [],
+                workhoursneeded: 0,
+                underconstruction: true
             }
         }
     }

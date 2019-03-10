@@ -45,13 +45,13 @@
             <div class="input">
                 <label><b>Planks</b></label>
                 <p>Workers</p>
-                <input class="inputbox" type="text" v-model="salt.workers">
+                <input class="inputbox" type="text" v-model="planks.workers">
                 <p>Modifier</p>
-                <input class="inputbox" type="text" v-model="salt.modifier">
+                <input class="inputbox" type="text" v-model="planks.modifier">
                 <p>Production</p>
-                <input class="inputbox" type="text" v-model="salt.production">
+                <input class="inputbox" type="text" v-model="planks.production">
                 <p>Total Planks</p>
-                <input class="inputbox" type="number" v-model="resources.salt">
+                <input class="inputbox" type="number" v-model="resources.planks">
             </div>
             <!--
             <div class="input">
@@ -91,10 +91,16 @@ export default {
                 modifier: 1,
                 workers:0
             },
+            planks: {
+                production: 0,
+                modifier: 1,
+                workers:0
+            },
             resources: {
                 wood: 0,
                 bricks: 0,
-                salt: 0
+                salt: 0,
+                planks: 0
             },
             counter : 0
         }
@@ -102,9 +108,10 @@ export default {
     methods: {
         calculate : function () {
             this.counter++;
-            this.resources.wood = parseInt(this.resources.wood) + parseInt(this.wood.production*this.wood.workers*this.wood.modifier)
-            this.resources.bricks = parseInt(this.resources.bricks) + parseInt(this.bricks.production*this.bricks.workers*this.bricks.modifier)
-            this.resources.salt = parseFloat(this.resources.salt) + parseFloat(this.salt.production*this.salt.worker*this.salt.modifier) 
+            this.resources.wood = parseFloat(this.resources.wood) + parseFloat(this.wood.production*this.wood.workers*this.wood.modifier)
+            this.resources.bricks = parseFloat(this.resources.bricks) + parseFloat(this.bricks.production*this.bricks.workers*this.bricks.modifier)
+            this.resources.salt = parseFloat(this.resources.salt) + parseFloat(this.salt.production*this.salt.workers*this.salt.modifier)
+            this.resources.planks = parseFloat(this.resources.planks) + parseFloat(this.planks.production*this.planks.workers*this.planks.modifier)
         }
     }
 }
