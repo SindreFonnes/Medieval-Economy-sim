@@ -39,6 +39,9 @@ export default {
         },
         removeentry: function(data){
             let tmp = backMain.getData()
+            
+            let i = tmp.citiesanddivisions.findIndex(t => t.id == data.location)
+            tmp.citiesanddivisions[i].complexes = tmp.citiesanddivisions[i].complexes.filter(t => t.id !=data.id)
 
             tmp.complexes = tmp.complexes.filter(t => t.id != data.id);
 

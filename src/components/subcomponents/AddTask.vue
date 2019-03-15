@@ -13,7 +13,7 @@
                     <option v-for="tasktype in this.data.tasktypes" v-bind:key="tasktype">{{tasktype}}</option>
                 </select>
             </div>
-            <div class="input" v-show="task.type === data.tasktypes[0]">
+            <div class="input" v-if="task.type === data.tasktypes[0]">
                 <Label><p>Resource exploited</p></Label>
                 <select v-model="task.resourceexploited">
                     <option v-for="resource in this.data.resources" v-bind:key="resource" v-bind:value="resource.id">{{resource.name}}</option>
@@ -33,6 +33,10 @@
                 <label><p>Max Workers</p></label>
                 <input class="inputbox" type="number" step="1" v-model="task.maxamountofworkers">
             </div>
+            <div class="input" v-if="task.type===data.tasktypes[3]">
+                <label><p>Amount of ware used per unit manufactured</p></label>
+                <input type="number" steps="0.01" v-model="task.manufacturemodifier">
+            </div>
             <div class="input" v-if="task.type===data.tasktypes[3]||task.type===data.tasktypes[0]" >
                 <label><p>Production per worker</p></label>
                 <input class="inputbox" type="number" step="1" v-model="task.productionperworker">
@@ -41,7 +45,7 @@
                 <label><p>Efficency</p></label>
                 <input class="inputbox" type="number" step="0.01" v-model="task.efficency">
             </div>
-            <div class="input">
+            <div class="input" v-if="task.type == data.tasktypes[4]">
                 <label><p>Has a duration</p></label>
                 <input class="inputbox checkbox" type="checkbox" v-model="task.hasaduration">
             </div>
@@ -63,8 +67,10 @@
                 <input type="checkbox" v-model="task.gainwares">
             </div>
             <div class="input" v-if="task.type===data.tasktypes[1]">
-                <label><p>Task Results</p></label>
-                <!-- Make dropdown for structures -->
+                <label><p>Structure being constructed: </p></label>
+                <select v-model="task.structureworkedon">
+                    <option v-for="construction in underconstruction" v-bind:key="construction.id" v-bind:value="construction.id">{{construction.name}}</option>
+                </select>
             </div>
             <div class="input" v-if="task.type===data.tasktypes[2]">
                 <label><p>Task Results</p></label>
@@ -105,20 +111,28 @@ export default {
                 productionperworker: 0,
                 efficency: 1,
                 hasaduration: false,
-                taskduration: 0,
+                duration: 0,
                 taskresults: "",
                 hasrevenueorupkeep: false,
                 revenueorupkeep: 0,
                 gainwares: true,
                 wareusedinmanufacture: "",
-                waregainedfrommanufacture: ""
+                waregainedfrommanufacture: "",
+                structureworkedon: "",
+                manufacturemodifier: 1
             },
             data: {},
-            errormessage: ""
+            errormessage: "",
+            underconstructions: []
         }
     },
     created: function(){
         this.data = backMain.getData()
+        for(let i = 0; i<this.data.structures.length; i++){
+            if(this.data.structures[i].underconstructions){
+                this.underconstructions.push(this.data.structures[i])
+            }
+        }
         
     },
     methods: {
@@ -174,6 +188,7 @@ export default {
             this.task.efficency = parseFloat(this.task.efficency)
             this.task.duration = parseFloat(this.task.duration)
             this.task.revenueorupkeep = parseFloat(this.task.revenueorupkeep)
+            this.task.manufacturemodifier = parseFloat(this.task.manufacturemodifier)
             this.task.id = shortid.generate()
             tmp.tasks.push(clonedeep(this.task));
             backMain.setData(clonedeep(tmp));
@@ -194,7 +209,9 @@ export default {
                 revenueorupkeep: 0,
                 gainwares: true,
                 wareusedinmanufacture: "",
-                waregainedfrommanufacture: ""
+                waregainedfrommanufacture: "",
+                structureworkedon: "",
+                manufacturemodifier: 1
             }
         }
     }

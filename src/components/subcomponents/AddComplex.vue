@@ -63,6 +63,7 @@ export default {
             }
             let tmp = backMain.getData();
             this.complex.id = shortid.generate();
+            tmp.citiesanddivisions.find(t => t.id == this.complex.location).complexes.push(clonedeep(this.complex));
             tmp.complexes.push(clonedeep(this.complex));
             backMain.setData(clonedeep(tmp));
             this.complex = {

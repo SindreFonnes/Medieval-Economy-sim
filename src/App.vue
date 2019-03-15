@@ -53,6 +53,12 @@
           Structure Designs
         </a>
         </router-link>
+        
+        <router-link to="/structures">
+        <a class="item" v-bind:class="{'active' : this.activeitems==11}" v-on:click="activeitem(11)">
+          Structures
+        </a>
+        </router-link>
         <router-link to="/complexes">
         <a class="item" v-bind:class="{'active' : this.activeitems==10}" v-on:click="activeitem(10)">
           Complexes

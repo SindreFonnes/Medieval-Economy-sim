@@ -12,6 +12,16 @@
                 <input class="inputbox" type="text" v-model="profession.description">
             </div>
             <div class="input">
+                <label><p>Profession Workhours per day</p></label>
+                <input type="number" steps="1" v-model="profession.workhours">
+            </div>
+            <div class="input">
+                <label><p>Profession Type</p></label>
+                <select v-model="profession.type">
+                    <option v-for="type in professiontypes" v-bind:key="type">{{type}}</option>
+                </select>
+            </div>
+            <div class="input">
                 <label><p>Profession Revenue/Upkeep (in copper per day)</p></label>
                 <input class="inputbox" type="number" steps="0.01" v-model="profession.revenueorupkeep">
             </div>
@@ -32,10 +42,17 @@ export default {
                 name: "",
                 id: "",
                 description: "",
+                type: "",
+                workhours: 0,
                 revenueorupkeep: 0
             },
-            errormessage: ""
+            errormessage: "",
+            professiontypes: []
         }
+    },
+    created: function() {
+        let tmp = backMain.getData();
+        this.professiontypes = tmp.professiontypes
     },
     methods: {
         submit: function() {

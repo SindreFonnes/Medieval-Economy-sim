@@ -21,19 +21,28 @@
                 <Label><p>Structure ground covered in meters</p></Label>
                 <p>Length :</p><input type="number" step="0.01" v-model="structure.groundcovered.x">
                 <p>Width :</p><input type="number" step="0.01" v-model="structure.groundcovered.y">
+                <p>Height :</p><input type="number" step="0.01" v-model="structure.groundcovered.z">
             </div>
             <div class="input">
-                <Label><p>Structure space used</p></Label>
-                <input type="number" step="0.01" v-model="structure.spaceused">
+                <Label><p>Average Solid vs Space ratio</p></Label>
+                <input type="range" min="1" max="100" v-model="structure.spaceused">
+                <p><input type="number" v-model="structure.spaceused" min="1" max="100"></p>
             </div>
             <div class="input">
+                <label><p>Location</p></label>
+                <select v-model="selectedcity">
+                    <option v-for="city in cities" v-bind:key="city.id" v-bind:value="city">{{city.name}}</option>
+                </select>
+            </div>
+            <!-- Make complexes shown dependent on city selection -->
+            <div class="input" v-if="selectedcity!=''">
                 <Label><p>Complex it belongs to</p></Label>
                 <select v-model="structure.designatedcomplex">
-                    <option v-for="complex in this.complexes" v-bind:key="complex.id" v-bind:value="complex.id">{{complex.name}}</option>
+                    <option v-for="complex in this.selectedcity.complexes" v-bind:key="complex.id" v-bind:value="complex.id">{{complex.name}}</option>
                 </select>
             </div>
             <div class="input">
-                <label>Needs to be constructed</label>
+                <label><p>Needs to be constructed</p></label>
                 <input type="checkbox" v-model="structure.underconstruction">
             </div>
             <div class="input">
@@ -67,9 +76,12 @@ export default {
                 designatedcomplex: "",
                 groundcovered: {
                     x: 0,
-                    y: 0
+                    y: 0,
+                    z: 0
                 },
-                spaceused: 0,
+                size: 0,
+                spaceused: 100,
+                materialsneeded: [],
                 isinhabitable: false,
                 maxoccupants: 0,
                 currentoccupants: [],
@@ -78,12 +90,20 @@ export default {
             },
             complexes: [],
             errormessage: "",
-            structuredesigns: []
+            structuredesigns: [],
+            cities: [],
+            selectedcity: ""
         }
     },
     created: function() {
         this.complexes = backMain.getData().complexes
         this.structuredesigns = backMain.getData().structuredesigns
+        let tmp = backMain.getData()
+        for(let i = 0; i<tmp.citiesanddivisions.length; i++){
+            if(tmp.citiesanddivisions[i].iscity){ 
+                this.cities.push(tmp.citiesanddivisions[i])
+            }
+        }
     },
     methods: {
         submit: function(){
@@ -104,11 +124,30 @@ export default {
                 this.errormessage="You must add a complex to the structure!"
                 return;
             }
+            if(this.structure.groundcovered.x===0){
+                this.errormessage="You must add a length to the structure!"
+                return;
+            }
+            if(this.structure.groundcovered.y===0){
+                this.errormessage="You must add a width to the structure!"
+                return;
+            }
+            if(this.structure.groundcovered.z===0){
+                this.errormessage="You must add a height to the structure!"
+                return;
+            }
             let tmp = backMain.getData()
             this.structure.id = shortid.generate()
             this.structure.groundcovered.x = parseFloat(this.structure.groundcovered.x)
             this.structure.groundcovered.y = parseFloat(this.structure.groundcovered.y)
-            this.structure.workhoursneeded = this.structure.spaceused*this.structuredesigns.find(t => t.id == this.structure.designused).timepercubicmeter
+            this.structure.groundcovered.z = parseFloat(this.structure.groundcovered.z)
+            this.structure.spaceused = parseFloat(this.structure.spaceused)/100
+            this.structure.materialsneeded = this.structuredesigns.find(t => t.id == this.structure.designused).buildingmaterials
+            this.structure.size = this.structure.groundcovered.x*this.structure.groundcovered.y*this.structure.groundcovered.z
+            for(let i = 0; i<this.structure.materialsneeded.length; i++){
+                this.structure.materialsneeded[i].amountneeded = this.structure.materialsneeded[i].amountneeded*this.structure.size*this.structure.spaceused
+            }
+            this.structure.workhoursneeded =  this.structure.size*this.structure.spaceused*this.structuredesigns.find(t => t.id == this.structure.designused).timepercubicmeter
             tmp.structures.push(clonedeep(this.structure))
             backMain.setData(clonedeep(tmp))
             this.structure = {
@@ -120,15 +159,19 @@ export default {
                 designatedcomplex: "",
                 groundcovered: {
                     x: 0,
-                    y: 0
+                    y: 0,
+                    z: 0
                 },
-                spaceused: 0,
+                size: 0,
+                spaceused: 100,
+                materialsneeded: [],
                 isinhabitable: false,
                 maxoccupants: 0,
                 currentoccupants: [],
                 workhoursneeded: 0,
                 underconstruction: true
             }
+            this.selectedcity= ""
         }
     }
 }

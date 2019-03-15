@@ -4,6 +4,8 @@
            
             <b>{{profession.name}}</b>
             <p>{{profession.description}}</p>
+            <p>{{profession.type}}</p>
+            <p>Workhours :{{profession.workhours}}</p>
             <div>
                 <div v-if="profession.revenueorupkeep>0">
                     Income: {{profession.revenueorupkeep}}

@@ -10,9 +10,20 @@ let data ={
     ],
     events:[],
     professions:[],
+    professiontypes:[
+        "Laborer",
+        "Craftsman",
+        "Professional",
+        "Salesman",
+        "Servant",
+        "Warrior",
+        "Artist",
+        "Upper Class"
+    ],
     citizens:[],
     resources:[],
     structuredesigns:[],
+    structures:[],
     complexes: [],
     wares:[],
     units:[

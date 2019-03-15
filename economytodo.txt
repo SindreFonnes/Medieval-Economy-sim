@@ -17,3 +17,5 @@ Make citizen able to own structures by making two dropdownmenus to add a structu
 Move methods that require loops or filtering to backmain out from classes.
 
 <!-- Add time to construct each cubic meter on average -->
+
+make a z (height) for structures, and make a modifier for space used(how much room will there be or something like that)
