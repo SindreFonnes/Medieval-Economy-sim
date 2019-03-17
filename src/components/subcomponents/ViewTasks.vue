@@ -35,9 +35,10 @@
             <div v-if="task.type == data.tasktype[3]">
                 <p>Amount of ware used per unit manufactured :{{task.manufacturemodifier}}</p>
             </div>
-            <div v-if="task.type == data.tasktype[3]">
-                {{task.structureworkedon}}
+            <div v-if="task.type == data.tasktype[1]">
+                Structure worked on :{{data.structures.find(t => t.id == task.structureworkedon).name}}
                 <p>Design used :{{data.structuredesigns.find(t => t.id == data.structures.find(s => s.id == task.structureworkedon).designused).name}}</p>
+                <p>Workhours left :{{data.structured.find(t => t.id == task.structureworkedon).workhoursneeded}}</p>
             </div>
             <div v-if="task.hasrevenueorupkeep">
                 <p>Per worker</p>
