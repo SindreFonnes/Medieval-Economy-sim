@@ -1,3 +1,7 @@
+To format file code 
+Shift + alt + f 
+
+
 
 TODO
 Add ware: done

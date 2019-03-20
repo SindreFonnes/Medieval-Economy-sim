@@ -60,6 +60,7 @@ import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
 import clonedeep from 'lodash.clonedeep'
 import randomname from 'random-name'
+import store from 'vuex'
 
 export default {
     name: "AddCitizen",
@@ -85,6 +86,9 @@ export default {
     },
     created: function() {
         this.data = backMain.getData()
+    },
+    computed: {
+        store
     },
     methods: {
         submit: function(){
