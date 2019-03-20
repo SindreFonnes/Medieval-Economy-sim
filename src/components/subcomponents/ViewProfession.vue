@@ -1,6 +1,6 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column task" v-for="profession in this.professions" v-bind:key="profession.id">
+        <div class="column task" v-for="profession in getProfessions" v-bind:key="profession.id">
            
             <b>{{profession.name}}</b>
             <p>{{profession.description}}</p>
@@ -20,29 +20,19 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-    data() {
-        return{
-            professions: []
-        }
-    },
-    created: function() {
-        this.professions = backMain.getData().professions
+    computed:  {
+        ...mapGetters([
+            'getProfessions'
+        ])
     },
     methods: {
-        getData: function(){
-            this.professions = backMain.getData().professions
-        },
+        ...mapMutations([
+            'REMOVE_PROFESSION'
+        ]),
         removeentry: function(data){
-            let tmp = backMain.getData()
-
-            tmp.professions = tmp.professions.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.professions = []
-            this.getData();
+            this.REMOVE_PROFESSION(data)
         }
     }
 }

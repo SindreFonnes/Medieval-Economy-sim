@@ -17,12 +17,12 @@
             <div class="input">
                 <Label><p>Buildingmaterials used (Hold ctrl to select multiple)</p></Label>
                 <select v-model="tmpmaterials" multiple>
-                    <option v-for="buildingmaterial in this.buildingmaterials" 
+                    <option v-for="buildingmaterial in getBuildingMaterials" 
                     v-bind:key="buildingmaterial.id"
                     v-bind:value="buildingmaterial">{{buildingmaterial.name}}</option>
                 </select>
             </div>
-            <div class="input" v-for="(buildingmaterial, index) in this.tmpmaterials" v-bind:key="buildingmaterial.id">
+            <div class="input" v-for="(buildingmaterial, index) in tmpmaterials" v-bind:key="buildingmaterial.id">
                 <label><p>{{buildingmaterial.name}} needed per cubic meter {{index}}</p></label>
                 <input type="number" steps="0.01" v-model="structuredesign.buildingmaterials[buildingmaterial.id]">
             </div>
@@ -32,9 +32,8 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
     name: "Addstructuredesign",
@@ -49,22 +48,19 @@ export default {
                 needsmaterials: true,
                 buildingmaterials: {}
             },
-            buildingmaterials: [],
             tmpmaterials: []
         }
     },
-    created: function() {
-        let tmp = backMain.getData().wares
-        for(let i = 0; i<tmp.length; i++){
-            if(tmp[i].buildingmaterial) {
-                this.buildingmaterials.push(tmp[i])
-            }
-        }
+    computed: {
+        ...mapGetters([
+            'getBuildingMaterials'
+        ])
     },
     methods: {
+        ...mapMutations([
+            'ADD_STRUCTURE_DESIGN'
+        ]),
         submit: function(){
-            let tmp = backMain.getData()
-
             this.structuredesign.buildingmaterials = this.tmpmaterials.reduce((list, { id }) => {
 
                 let bmat = { id, amountneeded: this.structuredesign.buildingmaterials[id] };
@@ -77,8 +73,9 @@ export default {
 
             this.structuredesign.id = shortid.generate()
             this.structuredesign.timepercubicmeter = parseFloat(this.structuredesign.timepercubicmeter)
-            tmp.structuredesigns.push(clonedeep(this.structuredesign))
-            backMain.setData(clonedeep(tmp))
+
+            this.ADD_STRUCTURE_DESIGN(this.structuredesign)
+
             this.structuredesign = {
                 id : "",
                 name : "",

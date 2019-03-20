@@ -14,7 +14,7 @@
             <div class="input">
                 <Label><p>Measure unit used</p></Label>
                 <select v-model="ware.unit">
-                    <option v-for="unit in this.units" v-bind:key="unit">{{unit}}</option>
+                    <option v-for="unit in getUnits" v-bind:key="unit">{{unit}}</option>
                 </select>
             </div>
             <div class="input">
@@ -31,9 +31,8 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
-import clonedeep from 'lodash.clonedeep'
+import {mapMutations, mapGetters} from 'vuex'
 
 export default {
     name: "AddWare",
@@ -48,14 +47,18 @@ export default {
                 amountowned: 0,
                 buildingmaterial: false
             },
-            units: [],
             errormessage: ""
         }
     },
-    created: function() {
-        this.units = backMain.getData().units
+    computed: {
+        ...mapGetters([
+            'getUnits'
+        ])
     },
     methods: {
+        ...mapMutations([
+            'ADD_WARE'
+        ]),
         submit: function(){
             this.errormessage=""
             if(this.ware.unit===""){
@@ -66,11 +69,9 @@ export default {
                 this.errormessage="You must add a name to the ware!"
                 return;
             }
-            let tmp = backMain.getData()
             this.ware.id = shortid.generate()
             this.ware.price = parseFloat(this.ware.price)
-            tmp.wares.push(clonedeep(this.ware))
-            backMain.setData(clonedeep(tmp))
+            this.ADD_WARE(this.ware)
             this.ware = {
                 id : "",
                 name : "",

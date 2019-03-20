@@ -1,12 +1,12 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column structuredesigns" v-for="structuredesign in this.structuredesigns" v-bind:key="structuredesign.id">
+        <div class="column structuredesigns" v-for="structuredesign in getStructureDesigns" v-bind:key="structuredesign.id">
             <b>Name: {{structuredesign.name}}</b>
             <p>Description: {{structuredesign.description}}</p>
             <div v-if="structuredesign.needsmaterials">
                 <p>Materials needed per cubic meter</p>
                 <p v-for="buildingmaterial in structuredesign.buildingmaterials" v-bind:key="buildingmaterial.id">
-                    <b>{{buildingmaterials.find(t => t.id ==buildingmaterial.id).name}} : {{buildingmaterial.amountneeded}}</b>
+                    <b>{{getBuildingMaterials.find(t => t.id ==buildingmaterial.id).name}} : {{buildingmaterial.amountneeded}}</b>
                 </p>
                 <!-- Add time to construct each cubic meter on average -->
             </div>
@@ -18,36 +18,20 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-    data() {
-        return{
-            structuredesigns: [],
-            buildingmaterials:[]
-        }
-    },
-    created: function() {
-        this.structuredesigns = backMain.getData().structuredesigns
-        let tmp = backMain.getData().wares
-        for(let i = 0; i<tmp.length; i++){
-            if(tmp[i].buildingmaterial) {
-                this.buildingmaterials.push(tmp[i])
-            }
-        }
+    computed: {
+        ...mapGetters([
+            'getStructureDesigns',
+            'getBuildingMaterials'
+        ])
     },
     methods: {
-        getData: function(){
-            this.structuredesigns = backMain.getData().structuredesigns
-        },
+        ...mapMutations([
+            'REMOVE_STRUCTURE_DESIGN'
+        ]),
         removeentry: function(data){
-            let tmp = backMain.getData()
-
-            tmp.structuredesigns = tmp.structuredesigns.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.resources = []
-            this.getData();
+            this.REMOVE_STRUCTURE_DESIGN(data)
         }
     }
 }

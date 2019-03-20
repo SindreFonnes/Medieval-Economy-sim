@@ -3,21 +3,21 @@
         <div class="select">
             <label>Citizen by type shown</label>
             <select v-model="professiontypeshown">
-                <option v-for="(type, index) in data.professiontypes" v-bind:key="type" v-bind:value="index">{{type}}</option>
-            </select>
-            <button v-on:click="updateSorting">Update</button>
-            
+                <option v-for="(type, index) in getProfessionTypes" v-bind:key="type" v-bind:value="index">{{type}}</option>
+            </select>     
         </div>
-        <div class="ui four column doubling stackable grid container" v-bind:key="key">
-            <div class="column citizen" v-for="citizen in this.citizensbyprofessiontype[professiontypeshown]" v-bind:key="citizen.id">
-                <b>Profession: {{data.professions.find(t => t.id == citizen.profession).name}}</b>
-                <p><b>Current task: <select label="task" 
-                :options="data.tasks" 
-                v-model="citizen.task"
-                v-on:change="updatetask">
-                    <option v-for="task in data.tasks" v-bind:key="task.id" v-bind:value="task.id">{{task.name}}</option>
-                </select></b></p>
-                <p>Belongs to: {{data.citiesanddivisions.find(t => t.id == citizen.cityordivision).name}}</p>
+        <div class="ui four column doubling stackable grid container">
+            <div class="column citizen" v-for="citizen in getCitizensByProfessionType[professiontypeshown]" v-bind:key="citizen.id">
+                <b>Profession: {{getProfessions.find(t => t.id == citizen.profession).name}}</b>
+                <p>
+                    <b>Current task: 
+                        <select label="task" v-model="citizen.task" v-on:change="updatetask">
+                            <option value="">No task</option>
+                            <option v-for="task in getTasks" v-bind:key="task.id" v-bind:value="task.id">{{task.name}}</option>
+                        </select>
+                    </b>
+                </p>
+                <p>Belongs to: {{getCitiesAndDivisions.find(t => t.id == citizen.cityordivision).name}}</p>
                 <p>Name: {{citizen.name}} </p>
                 <p>Surname: {{citizen.surname}}</p>
                 <p>Age: {{citizen.age}}</p>
@@ -31,123 +31,38 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
     data() {
         return{
-            citizens: [],
-            data: {},
-            showsubset: false,
             professiontypeshown: 0,
-            citizensbyprofessiontype: [
-                [],//0
-                [],//1
-                [],//2
-                [],//3
-                [],//4
-                [],//5
-                [],//6
-                []//7
-                ],
-            key: 0
         }
     },
-    created: function() {
-        this.citizensbyprofessiontype = [
-                [],//0
-                [],//1
-                [],//2
-                [],//3
-                [],//4
-                [],//5
-                [],//6
-                []//7
-                ]
-        this.data = backMain.getData()
-        this.citizens = this.data.citizens
-        for(let i = 0; i<this.citizens.length; i++) {
-            if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[0]) {
-                this.citizensbyprofessiontype[0].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[1]) {
-                this.citizensbyprofessiontype[1].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[2]) {
-                this.citizensbyprofessiontype[2].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[3]) {
-                this.citizensbyprofessiontype[3].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[4]) {
-                this.citizensbyprofessiontype[4].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[5]) {
-                this.citizensbyprofessiontype[5].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[6]) {
-                this.citizensbyprofessiontype[6].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[7]) {
-                this.citizensbyprofessiontype[7].push(this.citizens[i])
-            }
-        }
+    computed: {
+        ...mapGetters([
+            'getCitizensByProfessionType',
+            'getProfessionTypes',
+            'getTasks',
+            'getProfessions',
+            'getCitiesAndDivisions'
+        ])
     },
     methods: {
-        updateSorting: function(){
-            this.citizensbyprofessiontype = [
-                [],//0
-                [],//1
-                [],//2
-                [],//3
-                [],//4
-                [],//5
-                [],//6
-                []//7
-                ]
-            this.data = backMain.getData()
-            this.citizens = this.data.citizens
-            for(let i = 0; i<this.citizens.length; i++) {
-            if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[0]) {
-                this.citizensbyprofessiontype[0].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[1]) {
-                this.citizensbyprofessiontype[1].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[2]) {
-                this.citizensbyprofessiontype[2].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[3]) {
-                this.citizensbyprofessiontype[3].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[4]) {
-                this.citizensbyprofessiontype[4].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[5]) {
-                this.citizensbyprofessiontype[5].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[6]) {
-                this.citizensbyprofessiontype[6].push(this.citizens[i])
-            } else if(this.data.professions.find(t => t.id == this.citizens[i].profession).type==this.data.professiontypes[7]) {
-                this.citizensbyprofessiontype[7].push(this.citizens[i])
-            }
-            this.key++
-        }
-        },
-        getData: function(){
-            this.citizens = backMain.getData().citizens
-        },
+        ...mapMutations([
+            'REMOVE_CITIZEN',
+            'CITIZEN_CHANGE_AVAILABILITY',
+            'CITIZEN_UPDATE_TASK'
+        ]),
         removeentry: function(data){
-            let tmp = backMain.getData()
-
-            tmp.citizens = tmp.citizens.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.citizens = []
-            this.getData();
-            this.updateSorting();
+            this.REMOVE_CITIZEN(data)
         },
         changeavailability: function(data, status){
-            let tmp = backMain.getData();
-            let tmpindex = tmp.citizens.findIndex(t => t.id == data.id);
-            tmp.citizens[tmpindex].available = status;
-            backMain.setData(clonedeep(tmp));
-            this.getData();
+            let payload = [data, status]
+            this.CITIZEN_CHANGE_AVAILABILITY(payload)
         },
         updatetask: function(data){
-            let tmp = backMain.getData()
-            let tmpindex = tmp.citizens.findIndex(t => t.id == data.id);
-            tmp.citizens[tmpindex].task = data.task;
-            backMain.setData(clonedeep(tmp));
-            this.getData();
+            this.CITIZEN_UPDATE_TASK(data)
         }
     }
 }

@@ -14,7 +14,7 @@
             <div class="input">
                 <label><p>Location</p></label>
                 <select label="City" v-model="resource.city">
-                    <option  v-for="city in this.cities" v-bind:key="city.id" v-bind:value="city.id">{{city.name}}</option>
+                    <option  v-for="city in getCities" v-bind:key="city.id" v-bind:value="city.id">{{city.name}}</option>
                 </select>
             </div>
             <div class="input">
@@ -32,8 +32,8 @@
             </div>
             <div class="input">
                 <label><p>Type of ware when exploited</p></label>
-                <select label="Ware" :options="this.wares" v-model="resource.warewhenexploited">
-                    <option  v-for="ware in this.wares" v-bind:key="ware.id" v-bind:value="ware.id">{{ware.name}}</option>
+                <select label="Ware"  v-model="resource.warewhenexploited">
+                    <option  v-for="ware in getWares" v-bind:key="ware.id" v-bind:value="ware.id">{{ware.name}}</option>
                 </select>
             </div>
         </div>
@@ -42,9 +42,8 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 
 
 export default {
@@ -63,23 +62,20 @@ export default {
                 warewhenexploited: "",
                 resourceexploitationmodifier: 1
             },
-            citiesanddivisions: [],
-            cities: [],
-            wares: [],
             errormessage: ""
         }
     },
     
-    created: function(){
-        this.wares = backMain.getData().wares
-        this.citiesanddivisions = backMain.getData().citiesanddivisions
-        for(let i = 0; i<this.citiesanddivisions.length; i++){
-            if(this.citiesanddivisions[i].iscity){ 
-                this.cities.push(this.citiesanddivisions[i])
-            }
-        }
+    computed: {
+        ...mapGetters([
+            'getCities',
+            'getWares'
+        ])
     },
     methods: {
+        ...mapMutations([
+            'ADD_RESOURCE'
+        ]),
         submit: function() {
             this.errormessage=""
             if(this.resource.name===""){
@@ -94,14 +90,12 @@ export default {
                 this.errormessage="You must add a ware to the resource!"
                 return;
             }
-            let tmp = backMain.getData();
             this.resource.id = shortid.generate()
             this.resource.price = parseFloat(this.resource.price)
             this.resource.productionperworker = parseFloat(this.resource.productionperworker)
             this.resource.resourceamount = parseFloat(this.resource.resourceamount)
             this.resource.maxworkers = parseInt(this.resource.maxworkers)
-            tmp.resources.push(clonedeep(this.resource));
-            backMain.setData(clonedeep(tmp));
+            this.ADD_RESOURCE(this.resource)
             this.resource = {
                 name: "",
                 id: "",

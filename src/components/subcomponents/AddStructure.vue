@@ -14,7 +14,7 @@
             <div class="input">
                 <label><p>Design used</p></label>
                 <select v-model="structure.designused">
-                    <option v-for="structuredesign in structuredesigns" v-bind:key="structuredesign.id" v-bind:value="structuredesign.id">{{structuredesign.name}}</option>
+                    <option v-for="structuredesign in getStructureDesigns" v-bind:key="structuredesign.id" v-bind:value="structuredesign.id">{{structuredesign.name}}</option>
                 </select>
             </div>
             <div class="input">
@@ -31,14 +31,13 @@
             <div class="input">
                 <label><p>Location</p></label>
                 <select v-model="selectedcity">
-                    <option v-for="city in cities" v-bind:key="city.id" v-bind:value="city">{{city.name}}</option>
+                    <option v-for="city in getCities" v-bind:key="city.id" v-bind:value="city">{{city.name}}</option>
                 </select>
             </div>
-            <!-- Make complexes shown dependent on city selection -->
             <div class="input" v-if="selectedcity!=''">
                 <Label><p>Complex it belongs to</p></Label>
                 <select v-model="structure.designatedcomplex">
-                    <option v-for="complex in this.selectedcity.complexes" v-bind:key="complex.id" v-bind:value="complex.id">{{complex.name}}</option>
+                    <option v-for="complex in selectedcity.complexes" v-bind:key="complex.id" v-bind:value="complex.id">{{complex.name}}</option>
                 </select>
             </div>
             <div class="input">
@@ -59,8 +58,8 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
+import { mapGetters, mapMutations } from 'vuex';
 import clonedeep from 'lodash.clonedeep'
 
 export default {
@@ -88,24 +87,20 @@ export default {
                 workhoursneeded: 0,
                 underconstruction: true
             },
-            complexes: [],
             errormessage: "",
-            structuredesigns: [],
-            cities: [],
             selectedcity: ""
         }
     },
-    created: function() {
-        this.complexes = backMain.getData().complexes
-        this.structuredesigns = backMain.getData().structuredesigns
-        let tmp = backMain.getData()
-        for(let i = 0; i<tmp.citiesanddivisions.length; i++){
-            if(tmp.citiesanddivisions[i].iscity){ 
-                this.cities.push(tmp.citiesanddivisions[i])
-            }
-        }
+    computed:  {
+        ...mapGetters([
+            'getCities',
+            'getStructureDesigns'
+        ])
     },
     methods: {
+        ...mapMutations([
+            'ADD_STRUCTURE'
+        ]),
         submit: function(){
             this.errormessage=""
             if(this.structure.unit===""){
@@ -136,20 +131,18 @@ export default {
                 this.errormessage="You must add a height to the structure!"
                 return;
             }
-            let tmp = backMain.getData()
             this.structure.id = shortid.generate()
             this.structure.groundcovered.x = parseFloat(this.structure.groundcovered.x)
             this.structure.groundcovered.y = parseFloat(this.structure.groundcovered.y)
             this.structure.groundcovered.z = parseFloat(this.structure.groundcovered.z)
             this.structure.spaceused = parseFloat(this.structure.spaceused)/100
-            this.structure.materialsneeded = clonedeep(this.structuredesigns.find(t => t.id == this.structure.designused).buildingmaterials)
+            this.structure.materialsneeded = clonedeep(this.getStructureDesigns.find(t => t.id == this.structure.designused).buildingmaterials)
             this.structure.size = this.structure.groundcovered.x*this.structure.groundcovered.y*this.structure.groundcovered.z
             for(let i = 0; i<this.structure.materialsneeded.length; i++){
                 this.structure.materialsneeded[i].amountneeded = this.structure.materialsneeded[i].amountneeded*this.structure.size*this.structure.spaceused
             }
-            this.structure.workhoursneeded =  this.structure.size*this.structure.spaceused*this.structuredesigns.find(t => t.id == this.structure.designused).timepercubicmeter
-            tmp.structures.push(clonedeep(this.structure))
-            backMain.setData(clonedeep(tmp))
+            this.structure.workhoursneeded =  this.structure.size*this.structure.spaceused*this.getStructureDesigns.find(t => t.id == this.structure.designused).timepercubicmeter
+            this.ADD_STRUCTURE(this.structure)
             this.structure = {
                 id : "",
                 name : "",

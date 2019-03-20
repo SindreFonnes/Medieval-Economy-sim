@@ -18,7 +18,7 @@
             <div class="input">
                 <label><p>Profession Type</p></label>
                 <select v-model="profession.type">
-                    <option v-for="type in professiontypes" v-bind:key="type">{{type}}</option>
+                    <option v-for="type in getProfessionTypes" v-bind:key="type">{{type}}</option>
                 </select>
             </div>
             <div class="input">
@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
-import clonedeep from 'lodash.clonedeep'
+import {mapMutations, mapGetters} from 'vuex'
+
 export default {
     name: "AddProfession",
     data() {
@@ -47,28 +47,31 @@ export default {
                 revenueorupkeep: 0
             },
             errormessage: "",
-            professiontypes: []
         }
     },
-    created: function() {
-        let tmp = backMain.getData();
-        this.professiontypes = tmp.professiontypes
+    computed: {
+        ...mapGetters([
+            'getProfessionTypes'
+        ])
     },
     methods: {
+        ...mapMutations([
+            'ADD_PROFESSION'
+        ]),
         submit: function() {
             if(this.profession.name===""){
                 this.errormessage="You must add a name to the profession"
                 return;
             }
-            let tmp = backMain.getData();
             this.profession.id = shortid.generate();
             this.profession.revenueorupkeep = parseFloat(this.profession.revenueorupkeep);
-            tmp.professions.push(clonedeep(this.profession));
-            backMain.setData(clonedeep(tmp));
+            this.ADD_PROFESSION(this.profession)
             this.profession= {
                 name: "",
                 id: "",
                 description: "",
+                type: "",
+                workhours: 0,
                 revenueorupkeep: 0
             }
         }

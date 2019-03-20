@@ -14,7 +14,7 @@
             <div class="input">
                 <label><p>Complex location</p></label>
                 <select label="City or Division" v-model="complex.location">
-                    <option v-for="city in cities" v-bind:key="city.id" v-bind:value="city.id">{{city.name}}</option>
+                    <option v-for="city in getCities" v-bind:key="city.id" v-bind:value="city.id">{{city.name}}</option>
                 </select>
             </div>
         </div>
@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
-import clonedeep from 'lodash.clonedeep'
+import {mapGetters, mapMutations} from 'vuex'
+
 export default {
     name: "Addcomplex",
     data() {
@@ -38,21 +38,19 @@ export default {
                 structures: []
             },
             errormessage: "",
-            cities: []
         }
     },
-    created: function() {
-        let tmp = backMain.getData()
-        this.resources = tmp.resources
-        this.wares = tmp.wares
-        for(let i = 0; i<tmp.citiesanddivisions.length; i++){
-            if(tmp.citiesanddivisions[i].iscity){ 
-                this.cities.push(tmp.citiesanddivisions[i])
-            }
-        }
+    computed: {
+        ...mapGetters([
+            'getCities'
+        ])
     },
     methods: {
+        ...mapMutations([
+            'ADD_COMPLEX'
+        ]),
         submit: function() {
+            this.errormessage = ""
             if(this.complex.name===""){
                 this.errormessage="You must add a name to the complex!"
                 return;
@@ -61,11 +59,8 @@ export default {
                 this.errormessage="You must add a location to the complex!"
                 return;
             }
-            let tmp = backMain.getData();
             this.complex.id = shortid.generate();
-            tmp.citiesanddivisions.find(t => t.id == this.complex.location).complexes.push(clonedeep(this.complex));
-            tmp.complexes.push(clonedeep(this.complex));
-            backMain.setData(clonedeep(tmp));
+            this.ADD_COMPLEX(this.complex)
             this.complex = {
                 name: "",
                 id: "",

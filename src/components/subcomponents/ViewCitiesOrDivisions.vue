@@ -1,6 +1,6 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column cityordivision" v-for="cityordivision in this.citiesanddivisions" v-bind:key="cityordivision.id">
+        <div class="column cityordivision" v-for="cityordivision in getCitiesAndDivisions" v-bind:key="cityordivision.id">
 
             <b>Name: {{cityordivision.name}}</b>
             <p>Is a <b v-if="cityordivision.iscity">City</b><b v-if="!cityordivision.iscity">Division</b></p>
@@ -11,29 +11,20 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-    data() {
-        return{
-            citiesanddivisions: []
-        }
-    },
-    mounted: function() {
-        this.citiesanddivisions = backMain.getData().citiesanddivisions
+    computed: {
+        ...mapGetters([
+            'getCitiesAndDivisions'
+        ])
     },
     methods: {
-        getData: function(){
-            this.citiesanddivisions = backMain.getData().citiesanddivisions
-        },
+        ...mapMutations([
+            'REMOVE_CITY_OR_DIVISION'
+        ]),
+
         removeentry: function(data){
-            let tmp = backMain.getData()
-
-            tmp.citiesanddivisions = tmp.citiesanddivisions.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.citiesanddivisions = []
-            this.getData();
+            this.REMOVE_CITY_OR_DIVISION(data)
         }
     }
 }

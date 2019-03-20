@@ -1,23 +1,23 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column structure" v-for="structure in this.structures" v-bind:key="structure.id">
+        <div class="column structure" v-for="structure in getStructures" v-bind:key="structure.id">
             <b>Name: {{structure.name}}</b>
             <p>Description: {{structure.description}}</p>
             <p>Id : {{structure.id}}</p>
-            <p>Design used : {{structuredesigns.find(t => t.id == structure.designused).name}}</p>
+            <p>Design used : {{getStructureDesigns.find(t => t.id == structure.designused).name}}</p>
             <p>
-                <b v-if="structures.underconstruction">Is under construction</b>
+                <b v-if="structure.underconstruction">Is under construction</b>
             </p>
             <div v-if="structure.underconstruction">
                 Time remaining before complete in workhours:
                 <b>{{structure.workhoursneeded}}</b>
                 <p>Materials needed to complete construction :</p>
                 <p v-for="material in structure.materialsneeded" v-bind:key="material.id">
-                    {{buildingmaterials.find(t => t.id ==material.id).name}} :<b>{{material.amountneeded}}</b>
+                    {{getBuildingMaterials.find(t => t.id ==material.id).name}} :<b>{{material.amountneeded}}</b>
                 </p>
             </div>
-            <p>City it belongs to: {{cities.find(t => t.id==complexes.find(s => s.id == structure.designatedcomplex).location).name}}</p>
-            <p>Complex it belongs to: {{complexes.find(s => s.id == structure.designatedcomplex).name}}</p>
+            <p>City it belongs to: {{getCities.find(t => t.id==getComplexes.find(s => s.id == structure.designatedcomplex).location).name}}</p>
+            <p>Complex it belongs to: {{getComplexes.find(s => s.id == structure.designatedcomplex).name}}</p>
             <p>Size : {{structure.size}} cubic meters</p>
             <div v-if="structure.isinhabitable&&!structure.underconstruction">
                 <p>Amount of inhabitants: </p>
@@ -30,48 +30,23 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-    data() {
-        return{
-            structures: [],
-            complexes: [],
-            structuredesigns: [],
-            cities: [],
-            buildingmaterials: [],
-            wares: []
-        }
-    },
-    created: function() {
-        let tmp = backMain.getData()
-        this.structures = tmp.structures
-        this.wares = tmp.wares
-        this.complexes = tmp.complexes
-        this.structuredesigns = tmp.structuredesigns
-        for(let i = 0; i<tmp.citiesanddivisions.length; i++){
-            if(tmp.citiesanddivisions[i].iscity){ 
-                this.cities.push(tmp.citiesanddivisions[i])
-            }
-        }
-        for(let i = 0; i<tmp.wares.length; i++){
-            if(tmp.wares[i].buildingmaterial) {
-                this.buildingmaterials.push(tmp.wares[i])
-            }
-        }
+    computed: {
+        ...mapGetters([
+            'getStructures',
+            'getStructureDesigns',
+            'getBuildingMaterials',
+            'getCities',
+            'getComplexes'
+        ])
     },
     methods: {
-        getData: function(){
-            this.structures = backMain.getData().structures
-        },
+        ...mapMutations([
+            'REMOVE_STRUCTURE'
+        ]),
         removeentry: function(data){
-            let tmp = backMain.getData()
-
-            tmp.structures = tmp.structures.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.structures = []
-            this.getData();
+            this.REMOVE_STRUCTURE(data)
         }
     }
 }

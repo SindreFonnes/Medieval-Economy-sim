@@ -1,6 +1,6 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column wares" v-for="ware in wares" v-bind:key="ware.id">
+        <div class="column wares" v-for="ware in getWares" v-bind:key="ware.id">
             <b>Name: {{ware.name}}</b>
             <p>Description: {{ware.description}}</p>
             <p>Amount owned: {{ware.amountowned}}</p>
@@ -12,29 +12,20 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import {mapGetters, mapMutations} from 'vuex'
+
 export default {
-    data() {
-        return{
-            wares: []
-        }
-    },
-    mounted: function() {
-        this.wares = backMain.getData().wares
+    computed: {
+        ...mapGetters([
+            'getWares'
+        ])
     },
     methods: {
-        getData: function(){
-            this.wares = backMain.getData().wares
-        },
+        ...mapMutations([
+            'REMOVE_WARE'
+        ]),
         removeentry: function(data){
-            let tmp = backMain.getData()
-
-            tmp.wares = tmp.wares.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.wares = []
-            this.getData();
+            this.REMOVE_WARE(data)
         }
     }
 }

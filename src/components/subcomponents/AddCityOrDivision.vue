@@ -18,9 +18,8 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
 import shortid from 'shortid'
+import {mapMutations} from 'vuex'
 
 export default {
     name: "AddCity",
@@ -36,22 +35,17 @@ export default {
         }
     },
     methods: {
+        ...mapMutations([
+            'ADD_CITY_OR_DIVISION'
+        ]),
         submit: function(){
             this.errormessage="";
             if(this.cityordivision.name===""){
                 this.errormessage="You must add a name to the city/division!"
                 return;
             }
-            let tmp = backMain.getData();
-            for(let i = 0; i<tmp.citiesanddivisions.length; i++){
-                if(tmp.citiesanddivisions[i].name==this.cityordivision.name){
-                    this.errormessage ="There already exists a city or division with that name. Pick another name";
-                    return;
-                }
-            }
             this.cityordivision.id = shortid.generate();
-            tmp.citiesanddivisions.push(clonedeep(this.cityordivision));
-            backMain.setData(clonedeep(tmp));
+            this.ADD_CITY_OR_DIVISION(this.cityordivision)
             this.cityordivision = {
                 id: "",
                 name: "",

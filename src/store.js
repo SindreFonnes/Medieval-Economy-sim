@@ -7,60 +7,60 @@ Vue.use(Vuex)
 export default new Vuex.Store({
 	state: {
 		data: {
-			date: 0,
-			money: 0,
-			taxrate: 0.3,
-			tasks: [],
-			citiesanddivisions: [
-				{ id: "0001", name: "Winter's Reach", iscity: true, complexes: [] }
-			],
-			events: [],
-			professions: [],
-			professiontypes: [
-				"Laborer",
-				"Craftsman",
-				"Professional",
-				"Salesman",
-				"Servant",
-				"Warrior",
-				"Artist",
-				"Upper Class"
-			],
-			citizens: [],
-			resources: [],
-			structuredesigns: [],
-			structures: [],
-			complexes: [],
-			wares: [],
-			units: [
-				"cubic meters",
-				"square meters",
-				"liters",
-				"kilograms"
-			],
-			tasktypes: [
-				{
-					id: 0,
-					name: "exploit resource"
-				},
-				{
-					id: 1,
-					name: "build structure"
-				},
-				{
-					id: 2,
-					name: "build vehicle"
-				},
-				{
-					id: 3,
-					name: "manufacture goods"
-				},
-				{
-					id: 4,
-					name: "custom task"
-				}
-			],
-			vehicles: []
+			// date: 0,
+			// money: 0,
+			// taxrate: 0.3,
+			// tasks: [],
+			// citiesanddivisions: [
+			// 	{ id: "0001", name: "Winter's Reach", iscity: true, complexes: [] }
+			// ],
+			// events: [],
+			// professions: [],
+			// professiontypes: [
+			// 	"Laborer",
+			// 	"Craftsman",
+			// 	"Professional",
+			// 	"Salesman",
+			// 	"Servant",
+			// 	"Warrior",
+			// 	"Artist",
+			// 	"Upper Class"
+			// ],
+			// citizens: [],
+			// resources: [],
+			// structuredesigns: [],
+			// structures: [],
+			// complexes: [],
+			// wares: [],
+			// units: [
+			// 	"cubic meters",
+			// 	"square meters",
+			// 	"liters",
+			// 	"kilograms"
+			// ],
+			// tasktypes: [
+			// 	{
+			// 		id: 0,
+			// 		name: "exploit resource"
+			// 	},
+			// 	{
+			// 		id: 1,
+			// 		name: "build structure"
+			// 	},
+			// 	{
+			// 		id: 2,
+			// 		name: "build vehicle"
+			// 	},
+			// 	{
+			// 		id: 3,
+			// 		name: "manufacture goods"
+			// 	},
+			// 	{
+			// 		id: 4,
+			// 		name: "custom task"
+			// 	}
+			// ],
+			// vehicles: []
 		},
 		log : []
 	},
@@ -173,115 +173,196 @@ export default new Vuex.Store({
 		},
 		getMoney: state => {
 			return state.data.money
-		},
-		fetchBackendData: () => {
-			client.getData()
-		},
-		makeBackupFile: () => {
-			client.makeBackup()
-		},
-		pushData: () => {
-			client.pushdata()
-		},
-		endturn: () => {
-			client.endturn()
 		}
 	},
 	mutations: {
-		changeDate: (state, data) => {
+		CHANGE_DATE: (state, data) => {
 			state.data.date = data
 			let date = new Date()
 			state.log.push('Changed date to: ' + data + '; time: ' + date)
 		},
-		addDays: (state, data) => {
+		ADD_DAYS: (state, data) => {
 			state.data.date += data
 			let date = new Date()
 			state.log.push('Added: ' + data + ' days; time: ' + date)
 		},
-		changeTaxrate: (state, data) => {
+		CHANGE_TAXRATE: (state, data) => {
 			state.data.taxrate = data
 			let date = new Date()
 			state.log.push('Changed taxrate to: ' + data + '; time: ' + date)
 		},
-		addTask: (state, data) => {
+		ADD_TASK: (state, data) => {
+			if(data.type === state.data.tasktypes[0].id){
+				state.data.resources.find(t => t.id == data.resourceexploited).resourceexploited = true;
+			}
 			state.data.tasks.push(data)
 			let date = new Date()
 			state.log.push('Added task: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		addCityOrDivision: (state, data) => {
+		REMOVE_TASK: (state, data) => {
+			for(let i = 0; i < state.data.citizens.length; i++){
+				if(state.data.citizens[i].task === data.id) {
+					state.data.citizens[i].task = ""
+				}
+			}
+			if(data.type === state.data.tasktypes[0].id){
+				state.data.resources.find(t => t.id == data.resourceexploited).resourceexploited = false;
+			}
+			state.data.wares = state.data.wares.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed ware: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_CITY_OR_DIVISION: (state, data) => {
 			state.data.citiesanddivisions.push(data)
 			let date = new Date()
 			state.log.push('Added cityordivision: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		addEvent: (state, data) => {
+		REMOVE_CITY_OR_DIVISION: (state, data) => {
+			state.data.citiesanddivisions = state.data.citiesanddivisions.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed cityordivision: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_EVENT: (state, data) => {
 			state.data.events.push(data)
 			let date = new Date()
 			state.log.push('Added event: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		addProfession: (state, data) => {
+		REMOVE_EVENT: (state, data) => {
+			state.data.events = state.data.events.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed event: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_PROFESSION: (state, data) => {
 			state.data.professions.push(data)
 			let date = new Date()
 			state.log.push('Added profession: ' + data.name + ' id: '+ data.id + '; time: ' + date)
 		},
-		addCitizen: (state, data) => {
+		REMOVE_PROFESSION: (state, data) => {
+			state.data.professions = state.data.professions.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed profession: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_CITIZEN: (state, data) => {
 			state.data.citizens.push(data)
 			let date = new Date()
 			state.log.push('Added citizen: ' + data.name + ' ' + data.surname + ' id: ' + data.id + '; time: ' + date)
 		},
-		addResource: (state, data) => {
+		REMOVE_CITIZEN: (state, data) => {
+			state.data.citizens = state.data.citizens.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed citizen: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		CITIZEN_CHANGE_AVAILABILITY: (state, data) => {
+			let i = state.data.citizens.findIndex(t => t.id == data[0].id)
+			state.data.citizens[i].available = data[1]
+			let date = new Date()
+			state.log.push('Changed citizen '+ data[0].id + ' status to ' + data[1] + '; time: ' + date)
+		},
+		CITIZEN_UPDATE_TASK: (state, data) => {
+			let i = state.data.citizens.findIndex(t => t.id == data.id)
+			state.data.citizens[i].task = data.task
+			let date = new Date()
+			state.log.push('Changed citizen ' + data.id + ' current task to: ' + data.task + '; time: ' + date)
+		},
+		ADD_RESOURCE: (state, data) => {
 			state.data.resources.push(data)
 			let date = new Date()
 			state.log.push('Added resource: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		addStructureDesign: (state, data) => {
+		REMOVE_RESOURCE: (state, data) => {
+			state.data.resources = state.data.resources.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed resource: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_STRUCTURE_DESIGN: (state, data) => {
 			state.data.structuredesigns.push(data)
 			let date = new Date()
 			state.log.push('Added structuredesign: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		addStructure: (state, data) => {
+		REMOVE_STRUCTURE_DESIGN: (state, data) => {
+			state.data.structuredesigns = state.data.structuredesigns.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed structure design: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_STRUCTURE: (state, data) => {
 			state.data.structures.push(data)
 			let date = new Date()
 			state.log.push('Added structure: ' + data.id + '; time: ' + date)
 		},
-		addComplex: (state, data) => {
+		REMOVE_STRUCTURE: (state, data) => {
+			state.data.structures = state.data.structures.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed structure: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_COMPLEX: (state, data) => {
 			state.data.complexes.push(data)
+			state.data.citiesanddivisions.find(t => t.id == data.location).complexes.push(data)
 			let date = new Date()
 			state.log.push('Added complex: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		addWare: (state, data) => {
-			state.data.ware.push(data)
+		REMOVE_COMPLEX: (state, data) => {
+			state.data.complexes = state.data.complexes.filter(t => t.id != data.id)
+			let i = state.data.citiesanddivisions.findIndex(t => t.id == data.location)
+			state.data.citiesanddivisions[i] = state.data.citiesanddivisions[i].complexes.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed complex: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_WARE: (state, data) => {
+			state.data.wares.push(data)
 			let date = new Date()
 			state.log.push('Added ware: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		addVehicle: (state, data) => {
+		REMOVE_WARE: (state, data) => {
+			state.data.wares = state.data.wares.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed : ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		ADD_VEHICLE: (state, data) => {
 			state.data.vehicles.push(data)
 			let date = new Date()
 			state.log.push('Added vehicle: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
-		setData: (state, data) => {
+		REMOVE_VEHICLE: (state, data) => {
+			state.data.vehicles = state.data.vehicles.filter(t => t.id != data.id)
+			let date = new Date()
+			state.log.push('Removed vehicle: ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
+		SET_DATA: (state, data) => {
 			state.data = data
 			let date = new Date()
 			state.log.push('Data set!; time: ' + date)
 		},
-		setLog: (state, data) => {
+		SET_LOG: (state, data) => {
 			state.log = data
 			let date = new Date()
 			state.log.push('Log fetched!; time: ' + date)
 		},
-		addMoney: (state, data) => {
+		ADD_MONEY: (state, data) => {
 			state.data.money += data
 			let date = new Date()
 			state.log.push('Added ' + data + ' copper; time: ' + date)
 		},
-		removeMoney: (state, data) => {
+		REMOVE_MONEY: (state, data) => {
 			state.data.money -= data
 			let date = new Date()
 			state.log.push('Removed ' + data + ' copper; time: ' + date)
 		},
-		changeMoney: (state, data) => {
+		CHANGE_MONEY: (state, data) => {
 			state.data.money = data
 			let date = new Date()
 			state.log.push('Changed money to: ' + data + '; time: ' + date)
+		},
+		FETCH_BACKEND_DATA: () => {
+			client.getData()
+		},
+		MAKE_BACKUP_FILE: () => {
+			client.makeBackup()
+		},
+		PUSH_DATA: () => {
+			client.pushdata()
+		},
+		END_TURN: () => {
+			client.endturn()
 		}
 	},
 	actions: {

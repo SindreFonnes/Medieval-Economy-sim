@@ -35,13 +35,13 @@
             <div class="input">
                 <label><p>Home city/ unit assignment</p></label>
                 <select label="City or Division" v-model="citizen.cityordivision">
-                    <option v-for="cityordivision in data.citiesanddivisions" v-bind:key="cityordivision.id" v-bind:value="cityordivision.id">{{cityordivision.name}}</option>
+                    <option v-for="cityordivision in getCitiesAndDivisions" v-bind:key="cityordivision.id" v-bind:value="cityordivision.id">{{cityordivision.name}}</option>
                 </select>
             </div>
             <div class="input">
                 <label><p>Profession</p></label>
                 <select label="profession" v-model="citizen.profession">
-                    <option v-for="profession in data.professions" v-bind:key="profession.id" v-bind:value="profession.id">{{profession.name}}</option>
+                    <option v-for="profession in getProfessions" v-bind:key="profession.id" v-bind:value="profession.id">{{profession.name}}</option>
                 </select>
                 <!-- Dropdown with professions -->
             </div>
@@ -56,11 +56,9 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
-import clonedeep from 'lodash.clonedeep'
 import randomname from 'random-name'
-import store from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 
 export default {
     name: "AddCitizen",
@@ -78,19 +76,21 @@ export default {
             },
             randomage: true,
             autogeneratename: true,
-            data : {},
             errormessage: "",
             max : 40,
             min : 15,
         }
     },
-    created: function() {
-        this.data = backMain.getData()
-    },
     computed: {
-        store
+        ...mapGetters([
+            'getProfessions',
+            'getCitiesAndDivisions'
+        ])
     },
     methods: {
+        ...mapMutations([
+            'ADD_CITIZEN'
+        ]),
         submit: function(){
             this.errormessage=""
             if(this.autogeneratename){
@@ -113,11 +113,9 @@ export default {
                 this.min = parseFloat(this.min)
                 this.citizen.age = Math.floor(Math.random() * (+this.max - +this.min)) + +this.min;
             }
-            let tmp = backMain.getData()
             this.citizen.id = shortid.generate()
             this.citizen.age = parseFloat(this.citizen.age)
-            tmp.citizens.push(clonedeep(this.citizen))
-            backMain.setData(clonedeep(tmp))
+            this.ADD_CITIZEN(this.citizen)
             this.citizen = {
                 id : "",
                 age : 0,

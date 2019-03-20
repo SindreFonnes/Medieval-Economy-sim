@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
 import shortid from 'shortid';
 export default {
     name: "AddEvent",
@@ -31,11 +30,8 @@ export default {
     },
     methods: {
         submittask: function() {
-            let tmp = backMain.getData();
             this.event.id = shortid.generate()
-            tmp.events.push();
-            backMain.setData(tmp);
-            windows.alert("Event saved!")
+
             this.event = {
                 id: "",
                 name: "",

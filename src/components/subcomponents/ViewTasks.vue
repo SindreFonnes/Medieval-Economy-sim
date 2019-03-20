@@ -1,6 +1,6 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column task" v-for="task in this.data.tasks" v-bind:key="task.id">
+        <div class="column task" v-for="task in getTasks" v-bind:key="task.id">
            
             <b>{{task.name}}</b>
              
@@ -16,29 +16,29 @@
             <div>
                 <p>Gainwares :{{task.gainwares}}</p>
             </div>
-            <div v-if="task.type==data.tasktypes[0].id">
-                <p>Resource being exploited: {{data.resources.find(t => t.id == task.resourceexploited).name}}</p>
+            <div v-if="task.type==getTaskTypes[0].id">
+                <p>Resource being exploited: {{getResources.find(t => t.id == task.resourceexploited).name}}</p>
             </div>
             <div class="input">
                 <label><p>Efficency</p></label>
                 <input class="inputbox" type="number" step="0.01" v-model="task.efficency">
             </div>
-            <div v-if="task.type == data.tasktypes[3].id">
-                <p>Ware used :{{data.wares.find(t => t.id == task.wareusedinmanufacture).name}}</p>
+            <div v-if="task.type == getTaskTypes[3].id">
+                <p>Ware used :{{getWares.find(t => t.id == task.wareusedinmanufacture).name}}</p>
             </div>
-            <div v-if="task.type == data.tasktypes[0].id&&task.gainwares">
-                <p>Ware gained :{{data.wares.find(t => t.id == data.resources.find(s => s.id == task.resourceexploited).warewhenexploited).name}}</p>
+            <div v-if="task.type == getTaskTypes[0].id&&task.gainwares">
+                <p>Ware gained :{{getWares.find(t => t.id == getResources.find(s => s.id == task.resourceexploited).warewhenexploited).name}}</p>
             </div>
-            <div v-if="task.type == data.tasktypes[3].id&&task.gainwares">
-                <p>Ware gained :{{data.wares.find(t => t.id == task.waregainedfrommanufacture).name}}</p>
+            <div v-if="task.type == getTaskTypes[3].id&&task.gainwares">
+                <p>Ware gained :{{getWares.find(t => t.id == task.waregainedfrommanufacture).name}}</p>
             </div>
-            <div v-if="task.type == data.tasktypes[3].id">
-                <p>Amount of ware used per unit manufactured :{{task.manufacturemodifier}}</p>
+            <div v-if="task.type == getTaskTypes[3].id">
+                <p>Amount produced per unit expended in manufacture :{{task.manufacturemodifier}}</p>
             </div>
-            <div v-if="task.type == data.tasktypes[1].id">
-                Structure worked on :{{data.structures.find(t => t.id == task.structureworkedon).name}}
-                <p>Design used :{{data.structuredesigns.find(t => t.id == data.structures.find(s => s.id == task.structureworkedon).designused).name}}</p>
-                <p>Workhours left :{{data.structured.find(t => t.id == task.structureworkedon).workhoursneeded}}</p>
+            <div v-if="task.type == getTaskTypes[1].id">
+                Structure worked on :{{getStructures.find(t => t.id == task.structureworkedon).name}}
+                <p>Design used :{{getStructureDesigns.find(t => t.id == getStructures.find(s => s.id == task.structureworkedon).designused).name}}</p>
+                <p>Workhours left :{{getStructures.find(t => t.id == task.structureworkedon).workhoursneeded}}</p>
             </div>
             <div v-if="task.hasrevenueorupkeep">
                 <p>Per worker</p>
@@ -55,33 +55,24 @@
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-    data() {
-        return{
-            data:[]
-        }
-    },
-    created: function() {
-        this.data = backMain.getData()
+    computed: {
+        ...mapGetters([
+            'getTasks',
+            'getTaskTypes',
+            'getResources',
+            'getWares',
+            'getStructureDesigns',
+            'getStructures'
+        ])
     },
     methods: {
-        getData: function(){
-            this.data = backMain.getData()
-        },
+        ...mapMutations([
+            'REMOVE_TASK'
+        ]),
         removeentry: function(data){
-            let tmp = backMain.getData()
-            if(data.type===tmp.tasktypes[0].id){
-                let i = tmp.resources.findIndex(t => t.id == this.data.resourceexploited)
-                tmp.resources[i].resourceexploited = false;
-            }
-
-            tmp.tasks = tmp.tasks.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.data = []
-            this.getData();
+            this.REMOVE_TASK(data)
         }
     }
 }

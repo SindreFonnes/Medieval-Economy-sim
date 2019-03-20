@@ -1,53 +1,32 @@
 <template>
     <div class="ui four column doubling stackable grid container">
-        <div class="column task" v-for="complex in complexes" v-bind:key="complex.id">
+        <div class="column task" v-for="complex in getComplexes" v-bind:key="complex.id">
            
             <b>Name: {{complex.name}}</b>
             <p><b>Description: </b></p>
             <p>{{complex.description}}</p>
             <b>Location:</b>
-            <div>{{cities.find(t => t.id == complex.location).name}}</div>
+            <div>{{getCities.find(t => t.id == complex.location).name}}</div>
             <button v-on:click="removeentry(complex)">Remove complex</button>
         </div>
     </div>
 </template>
 
 <script>
-import backMain from "./../../backend/BackMain.js"
-import clonedeep from 'lodash.clonedeep'
+import { mapGetters, mapMutations } from 'vuex';
 export default {
-    data() {
-        return{
-            complexes: [],
-            cities: []
-        }
-    },
-    created: function() {
-        this.complexes = backMain.getData().complexes
-        let tmp = backMain.getData()
-        this.resources = tmp.resources
-        this.wares = tmp.wares
-        for(let i = 0; i<tmp.citiesanddivisions.length; i++){
-            if(tmp.citiesanddivisions[i].iscity){ 
-                this.cities.push(tmp.citiesanddivisions[i])
-            }
-        }
+    computed: {
+        ...mapGetters([
+            'getCities',
+            'getComplexes'
+        ])
     },
     methods: {
-        getData: function(){
-            this.complexes = backMain.getData().complexes
-        },
+        ...mapMutations([
+            'REMOVE_COMPLEX'
+        ]),
         removeentry: function(data){
-            let tmp = backMain.getData()
-            
-            let i = tmp.citiesanddivisions.findIndex(t => t.id == data.location)
-            tmp.citiesanddivisions[i].complexes = tmp.citiesanddivisions[i].complexes.filter(t => t.id !=data.id)
-
-            tmp.complexes = tmp.complexes.filter(t => t.id != data.id);
-
-            backMain.setData(clonedeep(tmp))
-            this.complexes = []
-            this.getData();
+            this.REMOVE_COMPLEX(data)
         }
     }
 }

@@ -1,8 +1,6 @@
 /* eslint-disable */
 
 import WebSocket from 'isomorphic-ws'
-import BackMain from './BackMain'
-import clonedeep from 'lodash.clonedeep'
 import store from './../store'
 
 
@@ -14,51 +12,49 @@ function sendData(message){
 }
 
 ws.onopen = function open() {
-  console.log('connected');
-  let message = {
-      type: 0,
-      content: "Connection established"
-  }
-  sendData(message)
+
+     console.log('Connection established');
+//   let message = {
+//       type: 0,
+//       content: "Connection established"
+//   }
+//   sendData(message)
 };
 
 ws.onmessage = function incoming({ data }) {
     let message = JSON.parse(data)
+
     //loading on startup
-    if(message.type === 0){
+    if (message.type === 0){
         console.log(message.content)
-        store.mutations.setData(message.content[0])
-        store.mutations.setLog(message.content[1])
-        BackMain.setData(clonedeep(message.content[0]))
-    }
-    //from endturn, days pass.
-    if(message.type === 1){
-        store.mutations.setData(message.content)
-        BackMain.setData(clonedeep(message.content))
+        store.commit('SET_DATA', (message.content[0]))
+        store.commit('SET_LOG',(message.content[1]))
     }
 
-    if(message.type === 10){
-        console.log(message.content)
-        getData()
+    //from endturn, days pass.
+    if(message.type === 1) {
+        store.commit('SET_DATA',(message.content))
     }
+
 }
 
 
 function endturn(days){
+    console.log(days)
     //ws.send(days)
     let message = {
         type: 1,
-        days: days,
-        content: store.getters.getData()
+        days: 0,
+        content: store.getters.getData
     };
     sendData(message)
-    console.log('sent!')
+    console.log('Endturn message sent!' + JSON.stringify(message))
 }
 
 function pushdata(){
     let message = {
         type: 2,
-        content: store.getters.getData()
+        content: store.getters.getData
     }
     sendData(message)
 }

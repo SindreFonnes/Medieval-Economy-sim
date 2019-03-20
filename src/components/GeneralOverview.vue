@@ -43,9 +43,7 @@
 
 <script>
 import viewtasks from './subcomponents/ViewTasks';
-import client from './../backend/client'
-import backmain from './../backend/BackMain'
-import clonedeep from 'lodash.clonedeep'
+
 export default {
     components:{
         'viewtasks':viewtasks
@@ -57,33 +55,26 @@ export default {
             date: 0
         }
     },
-    created: function() {
-        this.date = backmain.getData().date
-    },
+
     methods: {
         endturn: function(){
             this.endturndays = parseInt(this.endturndays)
-            client.endturn(this.endturndays)
-            this.endturndays = 1;
+            
         },
         pushdata: function(){
-            client.pushdata()
+            
         },
         makebackup: function(){
-            client.makeBackup()
+            
         },
         getdata: function(){
-            client.getData()
+            
         },
         updatetax: function(){
-            let tmp = backmain.getData()
-            tmp.taxrate = parseFloat(this.taxrate)/100
-            backmain.setData(clonedeep(tmp))
+            
         },
         updatedate: function(){
-            let tmp = backmain.getData()
-            tmp.date = parseInt(this.date)
-            backmain.setData(clonedeep(tmp))
+            
         }
     }
 }

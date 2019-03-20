@@ -3,6 +3,8 @@
         <div class="view">
             <addprofession />
         </div>
+        <br>
+        <br>
         <div class="view">
             <viewprofession />
         </div>

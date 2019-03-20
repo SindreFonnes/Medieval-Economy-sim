@@ -72,7 +72,6 @@
 </template>
 
 <script>
-import client from './backend/client'
 
 export default {
   name: "app",
@@ -89,22 +88,6 @@ export default {
   methods: {
     activeitem: function(item) {
       this.activeitems = item;
-    },
-    rerender: function(){
-      this.routerkey = this.routerkey+1;
-    },
-    endturn: function(){
-      this.endturndays = parseInt(this.endturndays)
-      client.endturn(this.endturndays)
-    },
-    syncdata: function(){
-      client.syncdata()
-    },
-    savedata: function(){
-      client.saveData()
-    },
-    makebackup: function(){
-      client.makeBackup()
     }
   }
 }
