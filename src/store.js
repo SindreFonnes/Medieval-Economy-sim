@@ -8,6 +8,7 @@ export default new Vuex.Store({
 	state: {
 		data: {
 			date: 0,
+			money: 0,
 			taxrate: 0.3,
 			tasks: [],
 			citiesanddivisions: [
@@ -169,6 +170,21 @@ export default new Vuex.Store({
 		},
 		getLog: state => {
 			return state.log
+		},
+		getMoney: state => {
+			return state.data.money
+		},
+		fetchBackendData: () => {
+			client.getData()
+		},
+		makeBackupFile: () => {
+			client.makeBackup()
+		},
+		pushData: () => {
+			client.pushdata()
+		},
+		endturn: () => {
+			client.endturn()
 		}
 	},
 	mutations: {
@@ -251,11 +267,24 @@ export default new Vuex.Store({
 			state.log = data
 			let date = new Date()
 			state.log.push('Log fetched!; time: ' + date)
+		},
+		addMoney: (state, data) => {
+			state.data.money += data
+			let date = new Date()
+			state.log.push('Added ' + data + ' copper; time: ' + date)
+		},
+		removeMoney: (state, data) => {
+			state.data.money -= data
+			let date = new Date()
+			state.log.push('Removed ' + data + ' copper; time: ' + date)
+		},
+		changeMoney: (state, data) => {
+			state.data.money = data
+			let date = new Date()
+			state.log.push('Changed money to: ' + data + '; time: ' + date)
 		}
 	},
 	actions: {
-		fetchBackendData() {
-			client.getData()
-		}
+		
 	}
 })

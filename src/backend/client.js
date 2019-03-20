@@ -3,6 +3,7 @@
 import WebSocket from 'isomorphic-ws'
 import BackMain from './BackMain'
 import clonedeep from 'lodash.clonedeep'
+import store from './../store'
 
 
 
@@ -26,16 +27,19 @@ ws.onmessage = function incoming({ data }) {
     //loading on startup
     if(message.type === 0){
         console.log(message.content)
-        BackMain.setData(clonedeep(message.content))
+        store.mutations.setData(message.content[0])
+        store.mutations.setLog(message.content[1])
+        BackMain.setData(clonedeep(message.content[0]))
     }
     //from endturn, days pass.
     if(message.type === 1){
+        store.mutations.setData(message.content)
         BackMain.setData(clonedeep(message.content))
     }
 
     if(message.type === 10){
         console.log(message.content)
-        //getData()
+        getData()
     }
 }
 
@@ -45,7 +49,7 @@ function endturn(days){
     let message = {
         type: 1,
         days: days,
-        content: BackMain.getData()
+        content: store.getters.getData()
     };
     sendData(message)
     console.log('sent!')
@@ -54,7 +58,7 @@ function endturn(days){
 function pushdata(){
     let message = {
         type: 2,
-        content: BackMain.getData()
+        content: store.getters.getData()
     }
     sendData(message)
 }
