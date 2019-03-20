@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    
     <nav>
       <!--TODO fiks click area for web navigation -->
       <div class="ui secondary pointing menu">
@@ -71,6 +72,7 @@
 </template>
 
 <script>
+import client from './backend/client'
 
 export default {
   name: "app",
@@ -78,8 +80,11 @@ export default {
     return{
       activeitems:0,
       //to force an update
-      routerkey:0
+      routerkey:0,
+      endturndays:1
     }
+  },
+  created: function(){
   },
   methods: {
     activeitem: function(item) {
@@ -87,6 +92,19 @@ export default {
     },
     rerender: function(){
       this.routerkey = this.routerkey+1;
+    },
+    endturn: function(){
+      this.endturndays = parseInt(this.endturndays)
+      client.endturn(this.endturndays)
+    },
+    syncdata: function(){
+      client.syncdata()
+    },
+    savedata: function(){
+      client.saveData()
+    },
+    makebackup: function(){
+      client.makeBackup()
     }
   }
 }
@@ -105,5 +123,11 @@ export default {
 
 nav {
   padding: 20px;
+}
+
+.endturn{
+  float: right;
+  border: 0.3em solid grey;
+  border-radius: 0.5em;
 }
 </style>

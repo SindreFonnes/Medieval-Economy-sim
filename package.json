@@ -10,6 +10,7 @@
   "dependencies": {
     "express": "^4.16.4",
     "gulp": "^4.0.0",
+    "isomorphic-ws": "^4.0.1",
     "lodash": "^4.17.11",
     "lodash.clonedeep": "^4.5.0",
     "lowdb": "^1.0.0",
@@ -18,7 +19,8 @@
     "semantic-ui-css": "^2.4.1",
     "shortid": "^2.2.14",
     "vue": "^2.6.6",
-    "vue-router": "^3.0.1"
+    "vue-router": "^3.0.1",
+    "ws": "^6.2.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.4.0",

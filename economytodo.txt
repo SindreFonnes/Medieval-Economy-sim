@@ -19,3 +19,6 @@ Move methods that require loops or filtering to backmain out from classes.
 <!-- Add time to construct each cubic meter on average -->
 
 make a z (height) for structures, and make a modifier for space used(how much room will there be or something like that)
+
+
+add taxrate to data

@@ -142,7 +142,7 @@ export default {
             this.structure.groundcovered.y = parseFloat(this.structure.groundcovered.y)
             this.structure.groundcovered.z = parseFloat(this.structure.groundcovered.z)
             this.structure.spaceused = parseFloat(this.structure.spaceused)/100
-            this.structure.materialsneeded = this.structuredesigns.find(t => t.id == this.structure.designused).buildingmaterials
+            this.structure.materialsneeded = clonedeep(this.structuredesigns.find(t => t.id == this.structure.designused).buildingmaterials)
             this.structure.size = this.structure.groundcovered.x*this.structure.groundcovered.y*this.structure.groundcovered.z
             for(let i = 0; i<this.structure.materialsneeded.length; i++){
                 this.structure.materialsneeded[i].amountneeded = this.structure.materialsneeded[i].amountneeded*this.structure.size*this.structure.spaceused

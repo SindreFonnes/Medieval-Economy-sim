@@ -14,7 +14,9 @@
                 <p><b>Current task: <select label="task" 
                 :options="data.tasks" 
                 v-model="citizen.task"
-                v-on:change="updatetask"></select></b></p>
+                v-on:change="updatetask">
+                    <option v-for="task in data.tasks" v-bind:key="task.id" v-bind:value="task.id">{{task.name}}</option>
+                </select></b></p>
                 <p>Belongs to: {{data.citiesanddivisions.find(t => t.id == citizen.cityordivision).name}}</p>
                 <p>Name: {{citizen.name}} </p>
                 <p>Surname: {{citizen.surname}}</p>

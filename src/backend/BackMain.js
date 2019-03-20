@@ -2,8 +2,10 @@
 
 import app from './../App.vue'
 
+
 let data ={
     date: 0,
+    taxrate: 0.3,
     tasks: [],
     citiesanddivisions:[
         {id:"0001",name:"Winter's Reach",iscity:true,complexes:[]}
@@ -33,11 +35,26 @@ let data ={
         "kilograms"
     ],
     tasktypes:[
-        "exploit resource",
-        "build structure",
-        "build vehicle",
-        "manufacture goods",
-        "custom task"
+        {
+            id: 0,
+            name: "exploit resource"
+        },
+        {
+            id: 1,
+            name: "build structure"
+        },
+        {
+            id: 2,
+            name: "build vehicle"
+        },
+        {
+            id: 3,
+            name: "manufacture goods"
+        },
+        {
+            id: 4,
+            name:"custom task"
+        }   
     ],
     vehicles:[]
 };

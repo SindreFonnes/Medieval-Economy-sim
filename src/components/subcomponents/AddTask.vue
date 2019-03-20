@@ -10,16 +10,16 @@
             <div class="input">
                 <Label><p>Task type</p></Label>
                 <select v-model="task.type">
-                    <option v-for="tasktype in this.data.tasktypes" v-bind:key="tasktype">{{tasktype}}</option>
+                    <option v-for="tasktype in this.data.tasktypes" v-bind:key="tasktype.id" v-bind:value="tasktype.id">{{tasktype.name}}</option>
                 </select>
             </div>
-            <div class="input" v-if="task.type === data.tasktypes[0]">
+            <div class="input" v-if="task.type === data.tasktypes[0].id">
                 <Label><p>Resource exploited</p></Label>
                 <select v-model="task.resourceexploited">
-                    <option v-for="resource in this.data.resources" v-bind:key="resource" v-bind:value="resource.id">{{resource.name}}</option>
+                    <option v-for="resource in this.data.resources" v-bind:key="resource.id" v-bind:value="resource.id">{{resource.name}}</option>
                 </select>
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[3]">
+            <div class="input" v-if="task.type===data.tasktypes[3].id">
                 <Label><p>Ware used in manufacture</p></Label>
                 <select label="Ware" v-model="task.wareusedinmanufacture">
                     <option  v-for="ware in this.data.wares" v-bind:key="ware.id" v-bind:value="ware.id">{{ware.name}}</option>
@@ -33,11 +33,11 @@
                 <label><p>Max Workers</p></label>
                 <input class="inputbox" type="number" step="1" v-model="task.maxamountofworkers">
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[3]">
+            <div class="input" v-if="task.type===data.tasktypes[3].id">
                 <label><p>Amount of ware used per unit manufactured</p></label>
                 <input type="number" steps="0.01" v-model="task.manufacturemodifier">
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[3]||task.type===data.tasktypes[0]" >
+            <div class="input" v-if="task.type===data.tasktypes[3].id||task.type===data.tasktypes[0].id" >
                 <label><p>Production per worker</p></label>
                 <input class="inputbox" type="number" step="1" v-model="task.productionperworker">
             </div>
@@ -45,7 +45,7 @@
                 <label><p>Efficency</p></label>
                 <input class="inputbox" type="number" step="0.01" v-model="task.efficency">
             </div>
-            <div class="input" v-if="task.type == data.tasktypes[4]">
+            <div class="input" v-if="task.type == data.tasktypes[4].id">
                 <label><p>Has a duration</p></label>
                 <input class="inputbox checkbox" type="checkbox" v-model="task.hasaduration">
             </div>
@@ -62,27 +62,27 @@
                 <label><p>Revenue or upkeep per worker (in copper)</p></label>
                 <input class="inputbox" type="number" step="0.01" v-model="task.revenueorupkeep">
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[0]||task.type===data.tasktypes[3]">
+            <div class="input" v-if="task.type===data.tasktypes[0].id||task.type===data.tasktypes[3].id">
                 <Label><p>Gain wares from exploitation</p></Label>
                 <input type="checkbox" v-model="task.gainwares">
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[1]">
+            <div class="input" v-if="task.type===data.tasktypes[1].id">
                 <label><p>Structure being constructed: </p></label>
                 <select v-model="task.structureworkedon">
                     <option v-for="construction in underconstruction" v-bind:key="construction.id" v-bind:value="construction.id">{{construction.name}}</option>
                 </select>
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[2]">
+            <div class="input" v-if="task.type===data.tasktypes[2].id">
                 <label><p>Task Results</p></label>
                 <!-- Make dropdown for vehicles -->
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[3]&&task.gainwares">
+            <div class="input" v-if="task.type===data.tasktypes[3].id&&task.gainwares">
                 <Label><p>Ware gained from manufacture</p></Label>
                 <select label="Ware" v-model="task.waregainedfrommanufacture">
                     <option  v-for="ware in this.data.wares" v-bind:key="ware.id" v-bind:value="ware.id">{{ware.name}}</option>
                 </select>
             </div>
-            <div class="input" v-if="task.type===data.tasktypes[4]">
+            <div class="input" v-if="task.type===data.tasktypes[4].id">
                 <label><p>Task Results</p></label>
                 <input class="inputbox" type="text" v-model="task.taskresults">
             </div>
@@ -103,7 +103,7 @@ export default {
             task: {
                 name: "",
                 id: "",
-                type: "",
+                type: 0,
                 resourceexploited: "",
                 amountofworkers: 0,
                 hasmaxworkers: false,
@@ -123,14 +123,14 @@ export default {
             },
             data: {},
             errormessage: "",
-            underconstructions: []
+            underconstruction: []
         }
     },
     created: function(){
         this.data = backMain.getData()
         for(let i = 0; i<this.data.structures.length; i++){
-            if(this.data.structures[i].underconstructions){
-                this.underconstructions.push(this.data.structures[i])
+            if(this.data.structures[i].underconstruction){
+                this.underconstruction.push(this.data.structures[i])
             }
         }
         
@@ -152,11 +152,11 @@ export default {
                 return;
             }
             this.task.productionperworker = parseFloat(this.task.productionperworker)
-            if((this.task.type===this.data.tasktypes[3]||this.task.type===this.data.tasktypes[0])&&this.task.productionperworker===0.0){
+            if((this.task.type===this.data.tasktypes[3].id||this.task.type===this.data.tasktypes[0].id)&&this.task.productionperworker===0.0){
                 this.errormessage="You must add a amount of production per worker!"
                 return;
             }
-            if(this.task.type===this.data.tasktypes[0]){
+            if(this.task.type===this.data.tasktypes[0].id){
                 if(this.task.resourceexploited!=""){
                     let i = tmp.resources.findIndex(t => t.id == this.task.resourceexploited)
                     tmp.resources[i].resourceexploited = true;
@@ -165,19 +165,19 @@ export default {
                     return;
                 }
             }
-            if(this.task.type===this.data.tasktypes[3]){
+            if(this.task.type===this.data.tasktypes[3].id){
                 if(this.task.wareusedinmanufacture===""){
                     this.errormessage = "You need to select a ware to use!"
                     return;
                 }
             }
-            if(this.task.type===this.data.tasktypes[3]&&this.task.gainwares){
+            if(this.task.type===this.data.tasktypes[3].id&&this.task.gainwares){
                 if(this.task.gainedfrommanufacture===""){
                     this.errormessage = "You need to select a ware to gain!"
                     return;
                 }
             }
-            if(this.task.type===this.data.tasktypes[3]){
+            if(this.task.type===this.data.tasktypes[3].id){
                 if(this.task.gainedfrommanufacture===this.task.wareusedinmanufacture){
                     this.errormessage = "You gain and use the same ware!"
                     return;
