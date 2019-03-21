@@ -16,8 +16,7 @@ export default {
     components: {
         'viewwares': viewwares,
         'addware': addware
-    }
-    
+    }   
 }
 </script>
 

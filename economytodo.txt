@@ -26,3 +26,39 @@ make a z (height) for structures, and make a modifier for space used(how much ro
 
 
 add taxrate to data
+
+
+tmp
+//task filter when at max workers
+let tmp = []
+			for(let i = 0; i< state.data.tasks.length; i++){
+				if(!state.data.tasks[i].hasmaxworkers){
+					tmp.push(state.data.tasks[i])
+				} else if(state.data.tasks[i].maxamountofworkers>state.data.tasks[i].workers.length) {
+					tmp.push(state.data.tasks[i])
+				}
+			}
+			return tmp
+
+
+rewrite profession?
+// let professions = [
+			// 	{
+			// 		name: 'Craftsman',
+			// 		list: [
+			// 			{
+			// 				name: 'Smith',
+			// 				...
+			// 			}
+			// 		]
+			// 	},
+			// 	{
+			// 		name: 'Craftsman',
+			// 		list: [
+			// 			{
+			// 				name: 'Smith',
+			// 				...
+			// 			}
+			// 		]
+			// 	}
+			// ]

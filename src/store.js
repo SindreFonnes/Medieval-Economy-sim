@@ -106,6 +106,29 @@ export default new Vuex.Store({
 		getProfessions: state => {
 			return state.data.professions
 		},
+		getProfessionsByType: state => {
+			let tmp = [[],[],[],[],[],[],[],[]]
+			for(let i = 0; i< state.data.professions.length; i++){
+				if(state.data.professions[i].type === state.data.professiontypes[0]) {
+					tmp[0].push(state.data.professions[i])
+				} else if(state.data.professions[i].type === state.data.professiontypes[1]) {
+					tmp[1].push(state.data.professions[i])
+				} else if(state.data.professions[i].type === state.data.professiontypes[2]) {
+					tmp[2].push(state.data.professions[i])
+				} else if(state.data.professions[i].type === state.data.professiontypes[3]) {
+					tmp[3].push(state.data.professions[i])
+				} else if(state.data.professions[i].type === state.data.professiontypes[4]) {
+					tmp[4].push(state.data.professions[i])
+				} else if(state.data.professions[i].type === state.data.professiontypes[5]) {
+					tmp[5].push(state.data.professions[i])
+				} else if(state.data.professions[i].type === state.data.professiontypes[6]) {
+					tmp[6].push(state.data.professions[i])
+				} else if(state.data.professions[i].type === state.data.professiontypes[7]) {
+					tmp[7].push(state.data.professions[i])
+				}
+			}
+			return tmp;
+		},
 		getProfessionTypes: state => {
 			return state.data.professiontypes
 		},
@@ -137,6 +160,34 @@ export default new Vuex.Store({
 					}
 				}
 			return citizensbyprofessiontype
+		},
+		getCitizenByCitySortedByProfessionTypeAndProfession: state => {
+			let tmp = []
+			//make an array for each city
+			for(let i = 0; i< state.data.citiesanddivisions.length; i++){
+				tmp.push([])
+				//make an array for each professiontype in each city
+				for(let j = 0; j<state.data.professiontypes.length; j++){
+					tmp[i].push([])
+					let counter = -1;
+					//check if the profession is the same type as the professiontype pushed, if yes, add to array
+					for(let k = 0; k<state.data.professions.length;k++){
+						
+						if(state.data.professiontypes[j]===state.data.professions[k].type){
+							tmp[i][j].push([])
+							counter++;
+							//Loop through to see if any citizen has the profession
+							for(let o = 0; o<state.data.citizens.length; o++) {
+								if(state.data.citizens[o].profession ===state.data.professions[k].id) {
+									tmp[i][j][counter].push(state.data.citizens[o])
+								}
+							}
+						}
+					}
+				}	
+			}
+
+			return tmp
 		},
 		getResources: state => {
 			return state.data.resources
@@ -262,9 +313,7 @@ export default new Vuex.Store({
 			let i = state.data.citizens.findIndex(t => t.id == data.id)
 			state.data.citizens[i].task = data.task
 			for(i = 0; i < state.data.tasks.length; i++){
-				if(state.data.tasks[i].workers.find(t => t.id ==data.id)!=undefined){
-					state.data.tasks[i].workers = state.data.tasks[i].workers.filter(t => t.id != data.id)
-				}
+				state.data.tasks[i].workers = state.data.tasks[i].workers.filter(t => t != data.id)
 			}
 			if(data.task != "") {
 				state.data.tasks.find(t => t.id == data.task).workers.push(data.id);

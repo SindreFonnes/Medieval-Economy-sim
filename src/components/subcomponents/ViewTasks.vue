@@ -5,10 +5,10 @@
             <b>{{task.name}}</b>
              
             <div class="input" v-if="task.hasmaxworkers">
-                <label><p>Workers {{task.amountofworkers}}/{{task.maxamountofworkers}}</p></label>
+                <label><p>Workers {{task.workers.length}}/{{task.maxamountofworkers}}</p></label>
             </div>
             <div class="input" v-if="!task.hasmaxworkers">
-                <label><p>Workers {{task.amountofworkers}}</p></label>
+                <label><p>Workers {{task.workers.length}}</p></label>
             </div>
             <div>
                 <p>Production per worker :{{task.productionperworker}}</p>

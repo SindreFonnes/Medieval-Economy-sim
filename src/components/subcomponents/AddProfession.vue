@@ -65,6 +65,7 @@ export default {
             }
             this.profession.id = shortid.generate();
             this.profession.revenueorupkeep = parseFloat(this.profession.revenueorupkeep);
+            this.profession.workhours = parseFloat(this.profession.workhours)
             this.ADD_PROFESSION(this.profession)
             this.profession= {
                 name: "",

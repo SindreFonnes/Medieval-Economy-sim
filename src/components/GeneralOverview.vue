@@ -34,13 +34,14 @@
             </div>
         </div>
         <div class="money">
-            <p><b>Current cash(in coppers): {{getMoney}}</b></p>
+            <p><b>Current cash in gold: {{getMoney/100}}</b></p>
             <p>change money by: <input v-model="money"/></p>
             <button v-on:click="updatemoney"><b>Update money</b></button>
         </div>
+
         <div class="ui four column doubling stackable grid container">
             <div class="view">
-
+                <viewwares></viewwares>
             </div>
         </div>
     </div>
@@ -48,9 +49,13 @@
 
 <script>
 import { mapMutations, mapGetters } from 'vuex';
+import viewwares from './subcomponents/ViewWares.vue'
 
 export default {
 
+components: {
+        'viewwares': viewwares,
+    },
     data() {
         return {
             endturndays:1,
@@ -95,13 +100,14 @@ export default {
             this.FETCH_BACKEND_DATA()
         },
         updatetax: function(){
-            this.CHANGE_TAXRATE(this.taxrate/100)
+            this.CHANGE_TAXRATE(parseFloat(this.taxrate)/100)
         },
         updatedate: function(){
-            this.CHANGE_DATE(this.date)
+            this.CHANGE_DATE(parseInt(this.date))
         },
         updatemoney: function(){
             this.ADD_MONEY(parseFloat(this.money))
+            this.money = 0;
         }
     }
 }
@@ -111,14 +117,16 @@ export default {
 
 
 .taxes {
-    align-self: right;
     display: inline-block;
     border: 0.3em solid grey;
     border-radius: 0.5em;
 }
-.endturn {
+.endturn{
     vertical-align: text-top;
     display: inline-block;
+    float: right;
+    border: 0.3em solid grey;
+    border-radius: 0.5em;
 }
 .date {
     border: 0.3em solid grey;
@@ -126,7 +134,13 @@ export default {
     float: left;
     display: inline-block;
 }
-.view{
-    float: left;
+.money{
+    margin-left: 3em;
+    margin-bottom: 5em;
+    border: 0.3em solid grey;
+    border-radius: 0.5em;
+    display: inline-block;
 }
+
+
 </style>

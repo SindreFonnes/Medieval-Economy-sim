@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     
-    <nav>
+    <nav class="nav">
       <!--TODO fiks click area for web navigation -->
       <div class="ui secondary pointing menu">
         <router-link to="/">
@@ -100,17 +100,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 3em;
 }
 
-
-nav {
+.nav {
   padding: 20px;
-}
-
-.endturn{
-  float: right;
-  border: 0.3em solid grey;
-  border-radius: 0.5em;
 }
 </style>
