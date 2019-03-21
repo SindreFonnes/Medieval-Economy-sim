@@ -104,7 +104,7 @@ export default {
                 id: "",
                 type: 0,
                 resourceexploited: "",
-                amountofworkers: 0,
+                workers: [],
                 hasmaxworkers: false,
                 maxamountofworkers: 0,
                 productionperworker: 0,
@@ -177,7 +177,6 @@ export default {
                     return;
                 }
             }
-            this.task.amountofworkers = parseInt(this.task.amountofworkers)
             this.task.maxamountofworkers = parseInt(this.task.maxamountofworkers)
             this.task.efficency = parseFloat(this.task.efficency)
             this.task.duration = parseFloat(this.task.duration)
@@ -190,7 +189,7 @@ export default {
                 id: "",
                 type: "",
                 resourceexploited: "",
-                amountofworkers: 0,
+                workers: [],
                 hasmaxworkers: false,
                 maxamountofworkers: 0,
                 productionperworker: 0,

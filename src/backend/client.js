@@ -44,7 +44,7 @@ function endturn(days){
     //ws.send(days)
     let message = {
         type: 1,
-        days: 0,
+        dayspassed: days,
         content: store.getters.getData
     };
     sendData(message)

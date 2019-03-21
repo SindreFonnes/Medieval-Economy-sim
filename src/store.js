@@ -261,6 +261,15 @@ export default new Vuex.Store({
 		CITIZEN_UPDATE_TASK: (state, data) => {
 			let i = state.data.citizens.findIndex(t => t.id == data.id)
 			state.data.citizens[i].task = data.task
+			for(i = 0; i < state.data.tasks.length; i++){
+				if(state.data.tasks[i].workers.find(t => t.id ==data.id)!=undefined){
+					state.data.tasks[i].workers = state.data.tasks[i].workers.filter(t => t.id != data.id)
+				}
+			}
+			if(data.task != "") {
+				state.data.tasks.find(t => t.id == data.task).workers.push(data.id);
+			}
+			state.data.tasks
 			let date = new Date()
 			state.log.push('Changed citizen ' + data.id + ' current task to: ' + data.task + '; time: ' + date)
 		},
@@ -317,6 +326,11 @@ export default new Vuex.Store({
 			let date = new Date()
 			state.log.push('Removed : ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
+		CHANGE_WARE_AMOUNT: (state, data) => {
+			state.data.wares.find(t => t.id == data.id).amountowned = parseFloat(data.amountowned)
+			let date = new Date()
+			state.log.push('Changed wareamount of : ' + data.name + ' id: ' + data.id + '; time: ' + date)
+		},
 		ADD_VEHICLE: (state, data) => {
 			state.data.vehicles.push(data)
 			let date = new Date()
@@ -352,17 +366,25 @@ export default new Vuex.Store({
 			let date = new Date()
 			state.log.push('Changed money to: ' + data + '; time: ' + date)
 		},
-		FETCH_BACKEND_DATA: () => {
+		FETCH_BACKEND_DATA: (state) => {
+			let date = new Date()
+			state.log.push('Making backupfile in backend; time: ' + date)
 			client.getData()
 		},
-		MAKE_BACKUP_FILE: () => {
+		MAKE_BACKUP_FILE: (state) => {
+			let date = new Date()
+			state.log.push('Making backupfile in backend; time: '+ date)
 			client.makeBackup()
 		},
-		PUSH_DATA: () => {
+		PUSH_DATA: (state) => {
+			let date = new Date()
+			state.log.push('Pushing data to backend; time: ' + date)
 			client.pushdata()
 		},
-		END_TURN: () => {
-			client.endturn()
+		END_TURN: (state ,data) => {
+			let date = new Date()
+			state.log.push('Ending turn; time: ' + date)
+			client.endturn(data)
 		}
 	},
 	actions: {
