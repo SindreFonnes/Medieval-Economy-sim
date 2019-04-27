@@ -73,6 +73,10 @@ export default {
 
             this.structuredesign.id = shortid.generate()
             this.structuredesign.timepercubicmeter = parseFloat(this.structuredesign.timepercubicmeter)
+            for(let i = 0; i<this.structuredesign.buildingmaterials.length; i++){
+                this.structuredesign.buildingmaterials[i].amountneeded = parseFloat(this.structuredesign.buildingmaterials[i].amountneeded)
+            }
+            
 
             this.ADD_STRUCTURE_DESIGN(this.structuredesign)
 
