@@ -9,8 +9,10 @@
         </div>
         <div class="date">
             <label>Date</label>
+            <p>{{this.getDate}}</p>
             <br>
-            <input type="number" steps="1" v-model="date" v-on:change="updatedate">
+            <input type="number" steps="1" v-model="date">
+            <button v-on:click="updatedate">Update date</button>
         </div>
         <div class="endturn">
             <div class="dayspassed">
