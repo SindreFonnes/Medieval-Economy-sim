@@ -4,12 +4,11 @@
             <b>Name: {{ware.name}}</b>
             <p>Description: {{ware.description}}</p>
             <p>Amount owned: {{ware.amountowned}}</p>
-            <p>Change to amount: <input v-model="ware.amountowned"/></p>
+            <p>How much to sell <input v-model="ware.amountowned"/></p>
             <button v-on:click="updatewareamount(ware)">Update amount</button>
             <p></p>
             <p>Measured in: {{ware.unit}}</p>
             <p>Price : {{ware.price}}</p>
-            <button v-on:click="removeentry(ware)">Remove ware</button>
         </div>
     </div>
 </template>
@@ -25,12 +24,8 @@ export default {
     },
     methods: {
         ...mapMutations([
-            'REMOVE_WARE',
             'CHANGE_WARE_AMOUNT'
         ]),
-        removeentry: function(data){
-            this.REMOVE_WARE(data)
-        },
         updatewareamount: function(data){
             this.CHANGE_WARE_AMOUNT(data)
         }

@@ -380,6 +380,10 @@ export default new Vuex.Store({
 			let date = new Date()
 			state.log.push('Changed wareamount of : ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},
+		SELL_WARES: (state, data) => {
+			state.data.wares.find(t => t.id == data.id).amountowned -=  parseFloat(data.amountowned)
+			let date = new Date()
+			state.log.push('Changed wareamount of : ' + data.name + ' id: ' + data.id + '; time: ' + date)		},
 		ADD_VEHICLE: (state, data) => {
 			state.data.vehicles.push(data)
 			let date = new Date()
