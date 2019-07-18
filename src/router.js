@@ -16,11 +16,6 @@ export default new Router({
       component: () => import('./components/Frontpage')
     },
     {
-      path: '/tmp',
-      name: 'tmp',
-      component: () => import('./components/TMPSolution')
-    },
-    {
       path: '/tasks',
       name: 'tasks',
       component: () => import('./components/Tasks')

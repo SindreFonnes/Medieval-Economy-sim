@@ -11,10 +11,12 @@
             <div v-if="structure.underconstruction">
                 Time remaining before complete in workhours:
                 <b>{{structure.workhoursneeded}}</b>
+                <p></p>
                 <p>Materials needed to complete construction :</p>
                 <p v-for="material in structure.materialsneeded" v-bind:key="material.id">
                     {{getBuildingMaterials.find(t => t.id ==material.id).name}} :<b>{{material.amountneeded}}</b>
                 </p>
+                <p></p>
             </div>
             <p>City it belongs to: {{getCities.find(t => t.id==getComplexes.find(s => s.id == structure.designatedcomplex).location).name}}</p>
             <p>Complex it belongs to: {{getComplexes.find(s => s.id == structure.designatedcomplex).name}}</p>

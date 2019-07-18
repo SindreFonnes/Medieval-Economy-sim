@@ -10,7 +10,8 @@
                 </p>
                 <!-- Add time to construct each cubic meter on average -->
             </div>
-            <p>Time needed per cubic meter(in hours):</p>
+            <p></p>
+            Time needed per cubic meter(in hours):
             <p>{{structuredesign.timepercubicmeter}}</p>
             <button v-on:click="removeentry(structuredesign)">Remove structuredesign</button>
         </div>

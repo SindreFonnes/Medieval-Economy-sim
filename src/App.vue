@@ -9,11 +9,6 @@
           Home
         </a>
         </router-link>
-        <router-link to="/tmp">
-        <a class="item" v-bind:class="{'active' : this.activeitems==1}" v-on:click="activeitem(1)">
-          Tmp Solution
-        </a>
-        </router-link>
         <router-link to="/generaloverview">
         <a class="item" v-bind:class="{'active' : this.activeitems==2}" v-on:click="activeitem(2)">
           General Overview

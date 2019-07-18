@@ -22,8 +22,8 @@
                     v-bind:value="buildingmaterial">{{buildingmaterial.name}}</option>
                 </select>
             </div>
-            <div class="input" v-for="(buildingmaterial, index) in tmpmaterials" v-bind:key="buildingmaterial.id">
-                <label><p>{{buildingmaterial.name}} needed per cubic meter {{index}}</p></label>
+            <div class="input" v-for="(buildingmaterial) in tmpmaterials" v-bind:key="buildingmaterial.id">
+                <label><p>{{buildingmaterial.name}} needed per cubic meter</p></label>
                 <input type="number" steps="0.01" v-model="structuredesign.buildingmaterials[buildingmaterial.id]">
             </div>
         </div>
