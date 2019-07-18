@@ -4,6 +4,7 @@ import client from './backend/client'
 
 Vue.use(Vuex)
 
+
 export default new Vuex.Store({
 	state: {
 		data: {},
@@ -137,6 +138,9 @@ export default new Vuex.Store({
 		getResources: state => {
 			return state.data.resources
 		},
+		getUnexploitedResources: state => {
+			return state.data.resources.filter(resources => !resources.isbeingexploited)
+		},
 		getStructureDesigns: state => {
 			return state.data.structuredesigns
 		},
@@ -189,7 +193,7 @@ export default new Vuex.Store({
 		},
 		ADD_TASK: (state, data) => {
 			if(data.type === state.data.tasktypes[0].id){
-				state.data.resources.find(t => t.id == data.resourceexploited).resourceexploited = true;
+				state.data.resources.find(t => t.id == data.resourceexploited).isbeingexploited = true;
 			}
 			state.data.tasks.push(data)
 			let date = new Date()
@@ -201,10 +205,12 @@ export default new Vuex.Store({
 					state.data.citizens[i].task = ""
 				}
 			}
+
 			if(data.type === state.data.tasktypes[0].id){
-				state.data.resources.find(t => t.id == data.resourceexploited).resourceexploited = false;
+				state.data.resources.find(t => t.id == data.resourceexploited).isbeingexploited = false;
 			}
-			state.data.wares = state.data.wares.filter(t => t.id != data.id)
+			state.data.tasks = state.data.tasks.filter(t => t.id != data.id)
+
 			let date = new Date()
 			state.log.push('Removed ware: ' + data.name + ' id: ' + data.id + '; time: ' + date)
 		},

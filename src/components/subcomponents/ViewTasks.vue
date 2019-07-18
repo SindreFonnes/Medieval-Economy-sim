@@ -26,12 +26,15 @@
             <div v-if="task.type == getTaskTypes[3].id">
                 <p>Ware used :{{getWares.find(t => t.id == task.wareusedinmanufacture).name}}</p>
             </div>
+            <p></p>
             <div v-if="task.type == getTaskTypes[0].id&&task.gainwares">
                 <p>Ware gained :{{getWares.find(t => t.id == getResources.find(s => s.id == task.resourceexploited).warewhenexploited).name}}</p>
             </div>
+            <p></p>
             <div v-if="task.type == getTaskTypes[3].id&&task.gainwares">
                 <p>Ware gained :{{getWares.find(t => t.id == task.waregainedfrommanufacture).name}}</p>
             </div>
+            <p></p>
             <div v-if="task.type == getTaskTypes[3].id">
                 <p>Amount produced per unit expended in manufacture :{{task.manufacturemodifier}}</p>
             </div>
@@ -40,13 +43,13 @@
                 <p>Design used :{{getStructureDesigns.find(t => t.id == getStructures.find(s => s.id == task.structureworkedon).designused).name}}</p>
                 <p>Workhours left :{{getStructures.find(t => t.id == task.structureworkedon).workhoursneeded}}</p>
             </div>
+            <p></p>
             <div v-if="task.hasrevenueorupkeep">
-                <p>Per worker</p>
                 <div v-if="task.revenueorupkeep>0">
-                    Income: {{task.revenueorupkeep}}
+                    Income for each worker: {{task.revenueorupkeep}}
                 </div>
                 <div v-if="task.revenueorupkeep<0">
-                    Upkeep: {{Math.abs(task.revenueorupkeep)}}
+                    Upkeep for each worker: {{Math.abs(task.revenueorupkeep)}}
                 </div>
             </div>
             <button v-on:click="removeentry(task)">Remove Task</button>

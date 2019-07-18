@@ -16,7 +16,7 @@
             <div class="input" v-if="task.type === getTaskTypes[0].id">
                 <Label><p>Resource exploited</p></Label>
                 <select v-model="task.resourceexploited">
-                    <option v-for="resource in getResources" v-bind:key="resource.id" v-bind:value="resource.id">{{resource.name}}</option>
+                    <option v-for="resource in getUnexploitedResources" v-bind:key="resource.id" v-bind:value="resource.id">{{resource.name}}</option>
                 </select>
             </div>
             <div class="input" v-if="task.type===getTaskTypes[3].id">
@@ -127,9 +127,9 @@ export default {
     computed: {
         ...mapGetters([
             'getTaskTypes',
-            'getResources',
             'getWares',
-            'getUnderConstruction'
+            'getUnderConstruction',
+            'getUnexploitedResources'
         ])
     },
     methods: {
