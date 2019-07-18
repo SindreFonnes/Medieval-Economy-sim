@@ -6,62 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
 	state: {
-		data: {
-			// date: 0,
-			// money: 0,
-			// taxrate: 0.3,
-			// tasks: [],
-			// citiesanddivisions: [
-			// 	{ id: "0001", name: "Winter's Reach", iscity: true, complexes: [] }
-			// ],
-			// events: [],
-			// professions: [],
-			// professiontypes: [
-			// 	"Laborer",
-			// 	"Craftsman",
-			// 	"Professional",
-			// 	"Salesman",
-			// 	"Servant",
-			// 	"Warrior",
-			// 	"Artist",
-			// 	"Upper Class"
-			// ],
-			// citizens: [],
-			// resources: [],
-			// structuredesigns: [],
-			// structures: [],
-			// complexes: [],
-			// wares: [],
-			// units: [
-			// 	"cubic meters",
-			// 	"square meters",
-			// 	"liters",
-			// 	"kilograms"
-			// ],
-			// tasktypes: [
-			// 	{
-			// 		id: 0,
-			// 		name: "exploit resource"
-			// 	},
-			// 	{
-			// 		id: 1,
-			// 		name: "build structure"
-			// 	},
-			// 	{
-			// 		id: 2,
-			// 		name: "build vehicle"
-			// 	},
-			// 	{
-			// 		id: 3,
-			// 		name: "manufacture goods"
-			// 	},
-			// 	{
-			// 		id: 4,
-			// 		name: "custom task"
-			// 	}
-			// ],
-			// vehicles: []
-		},
+		data: {},
 		log : []
 	},
 	getters: {
